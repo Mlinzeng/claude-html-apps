@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's for Dinner?</title>
+<style>
+  :root {
+    --bg1: #ff7e5f;
+    --bg2: #feb47b;
+    --card: #ffffff;
+    --text: #2d2d2d;
+    --muted: #7a7a7a;
+    --accent: #ff5e3a;
+    --accent-dark: #e6461f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .app {
+    width: 100%;
+    max-width: 440px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 22px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.22);
+    padding: 28px 24px;
+    position: relative;
+  }
+  .coin-toss-btn {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid #f2d9a0;
+    background: #fff8ea;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.15s;
+    z-index: 2;
+  }
+  .coin-toss-btn:hover { transform: scale(1.08); }
+  .coin-toss-btn:disabled { opacity: 0.7; cursor: default; }
+  .coin-toss-btn #coin-face.spin { display: inline-block; animation: coinSpin 0.7s linear; }
+  @keyframes coinSpin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(1080deg); }
+  }
+
+  .back-btn {
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .back-btn:hover { color: var(--accent); }
+  h1.title {
+    text-align: center;
+    margin: 0 0 4px;
+    font-size: 1.5rem;
+    color: var(--text);
+  }
+  p.subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin: 0 0 22px;
+    font-size: 0.9rem;
+  }
+  .question {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .options.grid-2 { grid-template-columns: 1fr 1fr; }
+  .options.grid-3 { grid-template-columns: 1fr 1fr; }
+
+  .option-btn {
+    border: 2px solid #f0f0f0;
+    background: #fafafa;
+    border-radius: 16px;
+    padding: 22px 14px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .option-btn .emoji {
+    display: block;
+    font-size: 2.1rem;
+    margin-bottom: 8px;
+  }
+  .option-btn:active { transform: scale(0.97); }
+  .option-btn:hover {
+    border-color: var(--accent);
+    background: #fff3ef;
+  }
+
+  .option-btn.small {
+    padding: 16px 10px;
+    font-size: 0.9rem;
+  }
+  .option-btn.small .emoji { font-size: 1.6rem; margin-bottom: 6px; }
+
+  .placeholder-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 18px;
+    padding: 12px;
+    background: #f7f7f7;
+    border-radius: 10px;
+  }
+
+  .battle {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .battle-option {
+    border: 2px solid #f0f0f0;
+    background: #fafafa;
+    border-radius: 16px;
+    padding: 26px 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .battle-option .emoji {
+    display: block;
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+  }
+  .battle-option:active { transform: scale(0.97); }
+  .battle-option:hover {
+    border-color: var(--accent);
+    background: #fff3ef;
+  }
+  .vs-label {
+    text-align: center;
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 0.95rem;
+    margin: 10px 0;
+    letter-spacing: 0.05em;
+  }
+
+  .result-box {
+    text-align: center;
+    background: linear-gradient(135deg, #fff3ef, #ffe4d6);
+    border-radius: 18px;
+    padding: 30px 20px;
+    margin-bottom: 20px;
+  }
+  .result-emoji {
+    display: block;
+    font-size: 3.2rem;
+    margin-bottom: 10px;
+  }
+  .result-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .result-sub {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-dark);
+  }
+  .reroll-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent);
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .reroll-btn:hover { background: var(--accent-dark); }
+  .reroll-btn:active { transform: scale(0.98); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="card" id="app-card"></div>
+</div>
+
+<script>
+  /*
+    Screen flow (to be filled in):
+      start
+        -> eatOutBattle (7 rounds) -> eatOutResult
+        -> eatInPrep -> eatInCraving -> eatInResult
+    Each screen is a function returning an HTML string.
+    Navigation keeps a history stack so Back always works.
+  */
+
+  const state = {
+    historyStack: [],
+    current: "start",
+    answers: {}
+  };
+
+  function go(screenName) {
+    state.historyStack.push(state.current);
+    state.current = screenName;
+    render();
+  }
+
+  function goBack() {
+    if (state.historyStack.length === 0) return;
+    state.current = state.historyStack.pop();
+    render();
+  }
+
+  function chooseLocation(loc) {
+    state.answers.location = loc;
+    if (loc === "out") {
+      startBattle();
+      go("eatOutBattle");
+    } else {
+      go("eatInPrep");
+    }
+  }
+
+  function flipCoin(e) {
+    e.stopPropagation();
+    const btn = document.getElementById("coin-btn");
+    const face = document.getElementById("coin-face");
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    face.classList.add("spin");
+    setTimeout(() => {
+      const result = Math.random() < 0.5 ? "out" : "in";
+      chooseLocation(result);
+    }, 700);
+  }
+
+  const CATEGORIES = [
+    { key: "sandwich", label: "Sandwich/Salad/Burger", emoji: "🥪" },
+    { key: "ramen", label: "Ramen", emoji: "🍜" },
+    { key: "local", label: "Local Food", emoji: "🌴" },
+    { key: "hawaiian", label: "Hawaiian/Polynesian", emoji: "🌺" },
+    { key: "koreanbbq", label: "Korean BBQ", emoji: "🔥" },
+    { key: "hotpot", label: "Hot Pot", emoji: "🍲" },
+    { key: "indian", label: "Indian", emoji: "🍛" },
+    { key: "thai", label: "Thai", emoji: "🌶️" },
+    { key: "vietnamese", label: "Vietnamese", emoji: "🍚" },
+    { key: "filipino", label: "Filipino", emoji: "🍢" },
+    { key: "chinese", label: "Chinese", emoji: "🥡" },
+    { key: "japanese", label: "Japanese", emoji: "🍱" },
+    { key: "poke", label: "Poke/Sushi", emoji: "🍣" },
+    { key: "steak", label: "Steak", emoji: "🥩" },
+    { key: "pizza", label: "Pizza", emoji: "🍕" },
+    { key: "tacos", label: "Tacos/Mexican", emoji: "🌮" },
+    { key: "breakfast", label: "Breakfast/Brunch", emoji: "🥞" },
+    { key: "seafood", label: "Seafood", emoji: "🦐" },
+    { key: "bbq", label: "BBQ", emoji: "🍖" },
+    { key: "buffet", label: "Buffet", emoji: "🍽️" },
+    { key: "acai", label: "Acai/Smoothie Bowls", emoji: "🍓" }
+  ];
+
+  function findByKey(list, key) { return list.find(item => item.key === key); }
+
+  const BATTLE_ROUNDS = 7;
+
+  function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function startBattle() {
+    const pool = shuffleArray(CATEGORIES);
+    state.battle = {
+      pool,
+      poolIndex: 2,
+      round: 1,
+      left: pool[0].key,
+      right: pool[1].key
+    };
+  }
+
+  function pickBattleWinner(side) {
+    const b = state.battle;
+    const winnerKey = side === "left" ? b.left : b.right;
+
+    if (b.round >= BATTLE_ROUNDS) {
+      state.answers.category = winnerKey;
+      go("eatOutResult");
+      return;
+    }
+
+    let nextChallenger = b.pool[b.poolIndex];
+    if (nextChallenger) {
+      b.poolIndex++;
+    } else {
+      const remaining = CATEGORIES.filter(c => c.key !== winnerKey);
+      nextChallenger = remaining[Math.floor(Math.random() * remaining.length)];
+    }
+
+    b.round++;
+    b.left = winnerKey;
+    b.right = nextChallenger.key;
+    render();
+  }
+
+  function rerollCategory() {
+    startBattle();
+    go("eatOutBattle");
+  }
+
+  const PREP_STYLES = [
+    { key: "cook", label: "Cook", emoji: "🍳" },
+    { key: "orderin", label: "Order In", emoji: "📦" },
+    { key: "pantry", label: "Use Pantry", emoji: "🥫" }
+  ];
+
+  const CRAVINGS = [
+    { key: "sweet", label: "Sweet", emoji: "🍰" },
+    { key: "savory", label: "Savory", emoji: "🍔" },
+    { key: "spicy", label: "Spicy", emoji: "🌶️" },
+    { key: "comforting", label: "Comforting", emoji: "🍲" },
+    { key: "light", label: "Light", emoji: "🥗" }
+  ];
+
+  function choosePrep(prepKey) {
+    state.answers.prep = prepKey;
+    go("eatInCraving");
+  }
+
+  function chooseCraving(cravingKey) {
+    state.answers.craving = cravingKey;
+    go("eatInResult");
+  }
+
+  function rerollCraving() {
+    const others = CRAVINGS.filter(c => c.key !== state.answers.craving);
+    const pick = others[Math.floor(Math.random() * others.length)];
+    state.answers.craving = pick.key;
+    render();
+  }
+
+  const screens = {
+    start() {
+      return `
+        <button class="coin-toss-btn" id="coin-btn" onclick="flipCoin(event)" title="Flip a coin to decide">
+          <span id="coin-face">🪙</span>
+        </button>
+        <h1 class="title">What's for Dinner?</h1>
+        <p class="subtitle">Let's figure it out, one question at a time.</p>
+        <div class="question">Are you eating out or eating in?</div>
+        <div class="options grid-2">
+          <button class="option-btn" onclick="chooseLocation('out')">
+            <span class="emoji">🍽️</span>Eat Out
+          </button>
+          <button class="option-btn" onclick="chooseLocation('in')">
+            <span class="emoji">🏠</span>Eat In
+          </button>
+        </div>
+      `;
+    },
+
+    eatOutBattle() {
+      const b = state.battle;
+      const left = findByKey(CATEGORIES, b.left);
+      const right = findByKey(CATEGORIES, b.right);
+      return `
+        <div class="question">Round ${b.round} of ${BATTLE_ROUNDS}</div>
+        <div class="battle">
+          <button class="battle-option" onclick="pickBattleWinner('left')">
+            <span class="emoji">${left.emoji}</span>${left.label}
+          </button>
+          <div class="vs-label">VS</div>
+          <button class="battle-option" onclick="pickBattleWinner('right')">
+            <span class="emoji">${right.emoji}</span>${right.label}
+          </button>
+        </div>
+      `;
+    },
+
+    eatOutResult() {
+      const category = findByKey(CATEGORIES, state.answers.category);
+      return `
+        <div class="question">Tonight's pick:</div>
+        <div class="result-box">
+          <span class="result-emoji">${category.emoji}</span>
+          <div class="result-text">${category.label}</div>
+        </div>
+        <button class="reroll-btn" onclick="rerollCategory()">🎲 Reroll</button>
+      `;
+    },
+
+    eatInPrep() {
+      return `
+        <div class="question">How do you want to prep it?</div>
+        <div class="options">
+          ${PREP_STYLES.map(p => `
+            <button class="option-btn" onclick="choosePrep('${p.key}')">
+              <span class="emoji">${p.emoji}</span>${p.label}
+            </button>`).join("")}
+        </div>
+      `;
+    },
+
+    eatInCraving() {
+      return `
+        <div class="question">What are you craving?</div>
+        <div class="options grid-2">
+          ${CRAVINGS.map(c => `
+            <button class="option-btn small" onclick="chooseCraving('${c.key}')">
+              <span class="emoji">${c.emoji}</span>${c.label}
+            </button>`).join("")}
+        </div>
+      `;
+    },
+
+    eatInResult() {
+      const prep = findByKey(PREP_STYLES, state.answers.prep);
+      const craving = findByKey(CRAVINGS, state.answers.craving);
+      return `
+        <div class="question">Tonight's pick:</div>
+        <div class="result-box">
+          <span class="result-emoji">${craving.emoji}</span>
+          <div class="result-text">${craving.label}</div>
+          <div class="result-sub">${prep.emoji} ${prep.label}</div>
+        </div>
+        <button class="reroll-btn" onclick="rerollCraving()">🎲 Reroll</button>
+      `;
+    }
+  };
+
+  function render() {
+    const container = document.getElementById("app-card");
+    const showBack = state.historyStack.length > 0;
+    const backHtml = showBack ? `<button class="back-btn" onclick="goBack()">&larr; Back</button>` : "";
+    container.innerHTML = backHtml + screens[state.current]();
+  }
+
+  render();
+</script>
+
+</body>
+</html>
