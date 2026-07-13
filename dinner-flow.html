@@ -227,10 +227,11 @@
 
 <script>
   /*
-    Screen flow (to be filled in):
+    Screen flow:
       start
-        -> eatOutBattle (7 rounds) -> eatOutResult
-        -> eatInPrep -> eatInCraving -> eatInResult
+        -> battleRound (10 rounds) -> battleResult              [Eat Out]
+        -> eatInPrep -> battleRound (10 rounds) -> battleResult  [Eat In > Order In]
+        -> eatInPrep -> eatInCraving -> eatInResult              [Eat In > Cook]
     Each screen is a function returning an HTML string.
     Navigation keeps a history stack so Back always works.
   */
@@ -256,8 +257,9 @@
   function chooseLocation(loc) {
     state.answers.location = loc;
     if (loc === "out") {
+      state.answers.prep = null;
       startBattle();
-      go("eatOutBattle");
+      go("battleRound");
     } else {
       go("eatInPrep");
     }
@@ -302,7 +304,7 @@
 
   function findByKey(list, key) { return list.find(item => item.key === key); }
 
-  const BATTLE_ROUNDS = 7;
+  const BATTLE_ROUNDS = 10;
 
   function shuffleArray(arr) {
     const a = [...arr];
@@ -330,7 +332,7 @@
 
     if (b.round >= BATTLE_ROUNDS) {
       state.answers.category = winnerKey;
-      go("eatOutResult");
+      go("battleResult");
       return;
     }
 
@@ -350,13 +352,12 @@
 
   function rerollCategory() {
     startBattle();
-    go("eatOutBattle");
+    go("battleRound");
   }
 
   const PREP_STYLES = [
     { key: "cook", label: "Cook", emoji: "🍳" },
-    { key: "orderin", label: "Order In", emoji: "📦" },
-    { key: "pantry", label: "Use Pantry", emoji: "🥫" }
+    { key: "orderin", label: "Order In", emoji: "📦" }
   ];
 
   const CRAVINGS = [
@@ -369,7 +370,12 @@
 
   function choosePrep(prepKey) {
     state.answers.prep = prepKey;
-    go("eatInCraving");
+    if (prepKey === "orderin") {
+      startBattle();
+      go("battleRound");
+    } else {
+      go("eatInCraving");
+    }
   }
 
   function chooseCraving(cravingKey) {
@@ -404,7 +410,7 @@
       `;
     },
 
-    eatOutBattle() {
+    battleRound() {
       const b = state.battle;
       const left = findByKey(CATEGORIES, b.left);
       const right = findByKey(CATEGORIES, b.right);
@@ -422,13 +428,15 @@
       `;
     },
 
-    eatOutResult() {
+    battleResult() {
       const category = findByKey(CATEGORIES, state.answers.category);
+      const prep = state.answers.prep ? findByKey(PREP_STYLES, state.answers.prep) : null;
       return `
         <div class="question">Tonight's pick:</div>
         <div class="result-box">
           <span class="result-emoji">${category.emoji}</span>
           <div class="result-text">${category.label}</div>
+          ${prep ? `<div class="result-sub">${prep.emoji} ${prep.label}</div>` : ""}
         </div>
         <button class="reroll-btn" onclick="rerollCategory()">🎲 Reroll</button>
       `;
@@ -437,7 +445,7 @@
     eatInPrep() {
       return `
         <div class="question">How do you want to prep it?</div>
-        <div class="options">
+        <div class="options grid-2">
           ${PREP_STYLES.map(p => `
             <button class="option-btn" onclick="choosePrep('${p.key}')">
               <span class="emoji">${p.emoji}</span>${p.label}
