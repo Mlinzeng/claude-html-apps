@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic-Tac-Toe</title>
+<style>
+  :root {
+    --bg: #F6F4EC;
+    --page-rule: 32 74 135;      /* ruled-line blue, as rgb triplet */
+    --margin: #C1554A;
+    --ink: #2B2823;
+    --ink-dim: #6B6656;
+    --grid: #9A9382;
+    --card: #FBFAF4;
+    --card-edge: #DAD5C4;
+    --x: #2453A6;
+    --o: #B23A2E;
+    --win: #C8912A;
+    --shadow: rgba(43, 40, 35, 0.14);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1B1E1B;
+      --page-rule: 255 255 255;
+      --margin: #E38A78;
+      --ink: #ECE7D8;
+      --ink-dim: #9BA096;
+      --grid: #565B52;
+      --card: #20241F;
+      --card-edge: #3A3F35;
+      --x: #7FB2FF;
+      --o: #FF9B85;
+      --win: #F0C860;
+      --shadow: rgba(0, 0, 0, 0.45);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1E1B;
+    --page-rule: 255 255 255;
+    --margin: #E38A78;
+    --ink: #ECE7D8;
+    --ink-dim: #9BA096;
+    --grid: #565B52;
+    --card: #20241F;
+    --card-edge: #3A3F35;
+    --x: #7FB2FF;
+    --o: #FF9B85;
+    --win: #F0C860;
+    --shadow: rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --bg: #F6F4EC;
+    --page-rule: 32 74 135;
+    --margin: #C1554A;
+    --ink: #2B2823;
+    --ink-dim: #6B6656;
+    --grid: #9A9382;
+    --card: #FBFAF4;
+    --card-edge: #DAD5C4;
+    --x: #2453A6;
+    --o: #B23A2E;
+    --win: #C8912A;
+    --shadow: rgba(43, 40, 35, 0.14);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px;
+    background-color: var(--bg);
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 30px,
+        rgba(var(--page-rule), 0.09) 30px,
+        rgba(var(--page-rule), 0.09) 31px
+      );
+    background-position: 0 6px;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: clamp(28px, 8vw, 96px);
+    width: 1px;
+    background: var(--margin);
+    opacity: 0.35;
+  }
+
+  .sheet {
+    position: relative;
+    width: min(420px, 100%);
+    background: var(--card);
+    border: 1px solid var(--card-edge);
+    box-shadow: 0 18px 40px -18px var(--shadow);
+    padding: 36px 32px 30px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  h1 {
+    margin: 0;
+    font-family: ui-monospace, "Courier New", Consolas, monospace;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.14em;
+    text-wrap: balance;
+  }
+  h1 span.x { color: var(--x); }
+  h1 span.o { color: var(--o); }
+  .tagline {
+    margin: 6px 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.02em;
+  }
+
+  .mode-toggle {
+    display: flex;
+    gap: 6px;
+    margin: 0 0 22px;
+    border: 1px solid var(--card-edge);
+    padding: 3px;
+  }
+  .mode-toggle button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font: inherit;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    padding: 8px 6px;
+    color: var(--ink-dim);
+    cursor: pointer;
+    font-family: ui-monospace, "Courier New", Consolas, monospace;
+  }
+  .mode-toggle button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--card);
+  }
+  .mode-toggle button:focus-visible,
+  .stamp-btn:focus-visible,
+  .cell:focus-visible,
+  .link-btn:focus-visible {
+    outline: 2px solid var(--win);
+    outline-offset: 2px;
+  }
+
+  .board {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+  }
+  .board svg.overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .grid-lines path {
+    fill: none;
+    stroke: var(--grid);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .win-line path {
+    fill: none;
+    stroke: var(--win);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .win-line path.drawn {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.45s ease;
+  }
+
+  .cells {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+    height: 100%;
+  }
+  .cell {
+    background: transparent;
+    border: none;
+    padding: 14%;
+    cursor: pointer;
+    display: flex;
+  }
+  .cell:disabled { cursor: default; }
+  .cell svg { width: 100%; height: 100%; overflow: visible; }
+  .cell svg path,
+  .cell svg circle {
+    fill: none;
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .cell svg.drawn path,
+  .cell svg.drawn circle {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.28s ease-out;
+  }
+  .mark-x path { stroke: var(--x); }
+  .mark-o circle { stroke: var(--o); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cell svg.drawn path,
+    .cell svg.drawn circle,
+    .win-line path.drawn {
+      transition: none;
+    }
+  }
+
+  .status-row {
+    margin-top: 22px;
+    min-height: 1.4em;
+    text-align: center;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+  }
+  .status-row .turn-x { color: var(--x); font-weight: 600; }
+  .status-row .turn-o { color: var(--o); font-weight: 600; }
+
+  .score {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 8px;
+    column-gap: 10px;
+    font-size: 0.85rem;
+    border-top: 1px solid var(--card-edge);
+    padding-top: 16px;
+  }
+  .score dt {
+    font-family: ui-monospace, "Courier New", Consolas, monospace;
+    color: var(--ink-dim);
+    letter-spacing: 0.03em;
+  }
+  .score dt.x-label { color: var(--x); }
+  .score dt.o-label { color: var(--o); }
+  .score dd {
+    margin: 0;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
+  }
+  .tally-empty { color: var(--ink-dim); opacity: 0.5; }
+  .tally-group {
+    position: relative;
+    display: inline-flex;
+    gap: 2px;
+    margin-right: 8px;
+  }
+  .tally-group .bar {
+    width: 3px;
+    height: 16px;
+    background: var(--ink);
+    border-radius: 1px;
+  }
+  .tally-group .strike {
+    position: absolute;
+    left: -3px;
+    right: -3px;
+    top: 7px;
+    height: 2px;
+    background: var(--ink);
+    transform: rotate(-32deg);
+  }
+
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .stamp-btn {
+    font-family: ui-monospace, "Courier New", Consolas, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    padding: 9px 16px;
+    cursor: pointer;
+    transform: rotate(-1deg);
+  }
+  .stamp-btn:hover { background: var(--ink); color: var(--card); }
+  .link-btn {
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    color: var(--ink-dim);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <h1><span class="x">X</span> · TIC TAC TOE · <span class="o">O</span></h1>
+    <p class="tagline">pen and paper by day, chalk and slate by night</p>
+  </header>
+
+  <div class="mode-toggle" role="group" aria-label="Game mode">
+    <button type="button" id="mode-cpu" aria-pressed="true">VS COMPUTER</button>
+    <button type="button" id="mode-2p" aria-pressed="false">TWO PLAYERS</button>
+  </div>
+
+  <div class="board">
+    <svg class="overlay grid-lines" viewBox="0 0 300 300" aria-hidden="true">
+      <path d="M100,14 Q104,150 99,286" />
+      <path d="M200,12 Q196,150 201,288" />
+      <path d="M14,100 Q150,96 286,101" />
+      <path d="M12,201 Q150,205 288,199" />
+    </svg>
+    <svg class="overlay win-line" viewBox="0 0 300 300" aria-hidden="true">
+      <path id="win-path" pathLength="1" d="" />
+    </svg>
+    <div class="cells" id="cells"></div>
+  </div>
+
+  <p class="status-row" id="status" role="status" aria-live="polite"></p>
+
+  <dl class="score">
+    <dt class="x-label">X wins</dt>
+    <dd id="tally-x"></dd>
+    <dt class="o-label">O wins</dt>
+    <dd id="tally-o"></dd>
+    <dt>Draws</dt>
+    <dd id="tally-d"></dd>
+  </dl>
+
+  <div class="actions">
+    <button type="button" class="stamp-btn" id="new-game">New game</button>
+    <button type="button" class="link-btn" id="reset-score">Reset score</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const HUMAN = 'X', AI = 'O';
+  const LINES = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+  const WIN_COORDS = {
+    '0,1,2': [24,50, 276,50],
+    '3,4,5': [22,150, 278,150],
+    '6,7,8': [24,250, 276,250],
+    '0,3,6': [50,24, 50,276],
+    '1,4,7': [150,22, 150,278],
+    '2,5,8': [250,24, 250,276],
+    '0,4,8': [24,24, 276,276],
+    '2,4,6': [276,24, 24,276]
+  };
+
+  const cellsEl = document.getElementById('cells');
+  const statusEl = document.getElementById('status');
+  const winPath = document.getElementById('win-path');
+  const modeCpuBtn = document.getElementById('mode-cpu');
+  const mode2pBtn = document.getElementById('mode-2p');
+  const newGameBtn = document.getElementById('new-game');
+  const resetScoreBtn = document.getElementById('reset-score');
+  const tallyXEl = document.getElementById('tally-x');
+  const tallyOEl = document.getElementById('tally-o');
+  const tallyDEl = document.getElementById('tally-d');
+
+  let board = Array(9).fill(null);
+  let mode = 'cpu';
+  let current = HUMAN;
+  let locked = false;
+  let score = loadScore();
+
+  function loadScore() {
+    try {
+      const raw = localStorage.getItem('ttt-score-v1');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return { X: 0, O: 0, D: 0 };
+  }
+  function saveScore() {
+    try { localStorage.setItem('ttt-score-v1', JSON.stringify(score)); } catch (e) {}
+  }
+
+  function buildCells() {
+    cellsEl.innerHTML = '';
+    for (let i = 0; i < 9; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'cell';
+      btn.type = 'button';
+      btn.dataset.index = i;
+      btn.setAttribute('aria-label', 'Cell ' + (i + 1));
+      btn.addEventListener('click', () => onCellClick(i));
+      cellsEl.appendChild(btn);
+    }
+  }
+
+  function markSVG(player) {
+    if (player === HUMAN) {
+      return '<svg class="mark-x" viewBox="0 0 100 100"><path d="M22,22 L78,78" pathLength="1"/><path d="M78,22 L22,78" pathLength="1"/></svg>';
+    }
+    return '<svg class="mark-o" viewBox="0 0 100 100"><circle cx="50" cy="50" r="32" pathLength="1"/></svg>';
+  }
+
+  function renderCell(i) {
+    const btn = cellsEl.children[i];
+    const val = board[i];
+    btn.disabled = !!val || locked;
+    if (val && !btn.dataset.filled) {
+      btn.dataset.filled = 'true';
+      btn.innerHTML = markSVG(val);
+      const svg = btn.querySelector('svg');
+      requestAnimationFrame(() => requestAnimationFrame(() => svg.classList.add('drawn')));
+    }
+  }
+
+  function renderBoard() {
+    for (let i = 0; i < 9; i++) renderCell(i);
+  }
+
+  function getWinnerInfo(b) {
+    for (const line of LINES) {
+      const [a, c, d] = line;
+      if (b[a] && b[a] === b[c] && b[a] === b[d]) return { winner: b[a], line };
+    }
+    if (b.every(v => v)) return { winner: 'D', line: null };
+    return null;
+  }
+
+  function tallyMarkup(n) {
+    if (n === 0) return '<span class="tally-empty">&mdash;</span>';
+    const groups = Math.floor(n / 5);
+    const rem = n % 5;
+    let html = '';
+    for (let i = 0; i < groups; i++) html += tallyGroup(5);
+    if (rem > 0) html += tallyGroup(rem);
+    return html;
+  }
+  function tallyGroup(count) {
+    let bars = '';
+    for (let i = 0; i < Math.min(count, 4); i++) bars += '<span class="bar"></span>';
+    const strike = count === 5 ? '<span class="strike"></span>' : '';
+    return '<span class="tally-group">' + bars + strike + '</span>';
+  }
+
+  function renderScore() {
+    tallyXEl.innerHTML = tallyMarkup(score.X);
+    tallyOEl.innerHTML = tallyMarkup(score.O);
+    tallyDEl.innerHTML = tallyMarkup(score.D);
+  }
+
+  function setStatus(html) {
+    statusEl.innerHTML = html;
+  }
+
+  function turnLabel(player) {
+    return player === HUMAN
+      ? '<span class="turn-x">X</span> to move'
+      : '<span class="turn-o">O</span> to move';
+  }
+
+  function updateStatus(info) {
+    if (!info) {
+      if (mode === 'cpu' && current === AI) {
+        setStatus('<span class="turn-o">O</span> is thinking&hellip;');
+      } else {
+        setStatus(turnLabel(current));
+      }
+      return;
+    }
+    if (info.winner === 'D') {
+      setStatus('It’s a draw.');
+    } else {
+      const cls = info.winner === HUMAN ? 'turn-x' : 'turn-o';
+      setStatus('<span class="' + cls + '">' + info.winner + '</span> wins!');
+    }
+  }
+
+  function drawWinLine(line) {
+    const key = line.join(',');
+    const coords = WIN_COORDS[key];
+    if (!coords) return;
+    const [x1, y1, x2, y2] = coords;
+    winPath.setAttribute('d', 'M' + x1 + ',' + y1 + ' L' + x2 + ',' + y2);
+    requestAnimationFrame(() => requestAnimationFrame(() => winPath.classList.add('drawn')));
+  }
+
+  function emptyIndices(b) {
+    const out = [];
+    for (let i = 0; i < 9; i++) if (!b[i]) out.push(i);
+    return out;
+  }
+
+  function minimax(b, depth, isAI) {
+    const info = getWinnerInfo(b);
+    if (info) {
+      if (info.winner === AI) return { score: 10 - depth };
+      if (info.winner === HUMAN) return { score: depth - 10 };
+      return { score: 0 };
+    }
+    const empties = emptyIndices(b);
+    let best = null;
+    for (const idx of empties) {
+      b[idx] = isAI ? AI : HUMAN;
+      const result = minimax(b, depth + 1, !isAI);
+      b[idx] = null;
+      if (best === null || (isAI ? result.score > best.score : result.score < best.score)) {
+        best = { score: result.score, index: idx };
+      }
+    }
+    return best;
+  }
+
+  function finishIfOver() {
+    const info = getWinnerInfo(board);
+    if (!info) return false;
+    if (info.line) drawWinLine(info.line);
+    updateStatus(info);
+    score[info.winner] += 1;
+    saveScore();
+    renderScore();
+    locked = true;
+    renderBoard();
+    return true;
+  }
+
+  function onCellClick(i) {
+    if (locked || board[i]) return;
+    if (mode === 'cpu' && current !== HUMAN) return;
+    place(i, current);
+  }
+
+  function place(i, player) {
+    board[i] = player;
+    renderCell(i);
+    if (finishIfOver()) return;
+    current = current === HUMAN ? AI : HUMAN;
+    updateStatus(null);
+    if (mode === 'cpu' && current === AI) {
+      locked = true;
+      renderBoard();
+      setTimeout(computerMove, 480);
+    }
+  }
+
+  function computerMove() {
+    const result = minimax(board.slice(), 0, true);
+    locked = false;
+    if (result && result.index !== undefined) place(result.index, AI);
+  }
+
+  function newGame() {
+    board = Array(9).fill(null);
+    current = HUMAN;
+    locked = false;
+    winPath.classList.remove('drawn');
+    winPath.setAttribute('d', '');
+    buildCells();
+    renderBoard();
+    updateStatus(null);
+  }
+
+  function setMode(next) {
+    mode = next;
+    modeCpuBtn.setAttribute('aria-pressed', String(mode === 'cpu'));
+    mode2pBtn.setAttribute('aria-pressed', String(mode === '2p'));
+    newGame();
+  }
+
+  modeCpuBtn.addEventListener('click', () => setMode('cpu'));
+  mode2pBtn.addEventListener('click', () => setMode('2p'));
+  newGameBtn.addEventListener('click', newGame);
+  resetScoreBtn.addEventListener('click', () => {
+    score = { X: 0, O: 0, D: 0 };
+    saveScore();
+    renderScore();
+  });
+
+  buildCells();
+  renderScore();
+  newGame();
+})();
+</script>
+</body>
+</html>

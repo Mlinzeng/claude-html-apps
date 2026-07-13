@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's for Dinner?</title>
+<style>
+  :root {
+    --bg1: #ff9a56;
+    --bg2: #ff6b6b;
+    --card: #ffffff;
+    --text: #2d2d2d;
+    --muted: #7a7a7a;
+    --accent: #ff6b6b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .app {
+    width: 100%;
+    max-width: 560px;
+    background: var(--card);
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    padding: 32px;
+  }
+  h1 {
+    text-align: center;
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+    color: var(--text);
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin: 0 0 24px;
+    font-size: 0.95rem;
+  }
+  .steps {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e5e5e5;
+    transition: background 0.3s;
+  }
+  .step-dot.active { background: var(--accent); }
+  .step-dot.done { background: #ffb199; }
+
+  .screen { display: none; }
+  .screen.visible { display: block; animation: fadeIn 0.35s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .grid.single-col { grid-template-columns: 1fr; }
+
+  .option-btn {
+    border: 2px solid #f0f0f0;
+    background: #fafafa;
+    border-radius: 14px;
+    padding: 20px 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .option-btn .emoji {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+  .option-btn:hover {
+    border-color: var(--accent);
+    background: #fff5f2;
+    transform: translateY(-2px);
+  }
+
+  .choice-card {
+    border: 2px solid #f0f0f0;
+    background: #fafafa;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .choice-card:hover {
+    border-color: var(--accent);
+    background: #fff5f2;
+    transform: translateY(-2px);
+  }
+  .choice-card h3 {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .choice-card p {
+    margin: 0 0 4px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .choice-card .distance {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .zip-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .zip-form input {
+    padding: 14px 16px;
+    font-size: 1.1rem;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .zip-form input:focus { border-color: var(--accent); }
+  .zip-form button {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--accent);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .zip-form button:hover { background: #ff5252; }
+  .zip-hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: -6px;
+  }
+
+  .status-box {
+    text-align: center;
+    padding: 30px 10px;
+    color: var(--muted);
+  }
+  .spinner {
+    width: 34px;
+    height: 34px;
+    border: 4px solid #f0f0f0;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    margin: 0 auto 14px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-box {
+    text-align: center;
+    padding: 20px 10px;
+    color: #b03030;
+    background: #fff0f0;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+  }
+  .note-box {
+    text-align: center;
+    padding: 10px;
+    color: var(--muted);
+    background: #f7f7f7;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    margin-bottom: 14px;
+  }
+
+  .result {
+    text-align: center;
+    padding: 20px 0 6px;
+  }
+  .result .emoji-big {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .result h2 {
+    margin: 0 0 8px;
+    color: var(--text);
+  }
+  .result p {
+    color: var(--muted);
+    margin: 0 0 8px;
+    font-size: 1rem;
+  }
+  .result .directions {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  .result .directions:hover { text-decoration: underline; }
+
+  .restart-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--accent);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .restart-btn:hover { background: #ff5252; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <h1>What's for Dinner? 🍽️</h1>
+  <p class="subtitle">Let's narrow it down, then find real spots near you.</p>
+
+  <div class="steps">
+    <span class="step-dot" data-dot="1"></span>
+    <span class="step-dot" data-dot="2"></span>
+    <span class="step-dot" data-dot="3"></span>
+    <span class="step-dot" data-dot="4"></span>
+  </div>
+
+  <!-- Step 1: Cuisine -->
+  <div class="screen" id="screen-1">
+    <div class="grid">
+      <button class="option-btn" data-cuisine="mexican"><span class="emoji">🌮</span>Mexican</button>
+      <button class="option-btn" data-cuisine="asian"><span class="emoji">🍜</span>Asian</button>
+      <button class="option-btn" data-cuisine="american"><span class="emoji">🍔</span>American</button>
+      <button class="option-btn" data-cuisine="italian"><span class="emoji">🍝</span>Italian</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Style -->
+  <div class="screen" id="screen-2">
+    <a class="back-link" data-back="1">&larr; Back to cuisine</a>
+    <div class="grid single-col">
+      <button class="option-btn" data-style="fast"><span class="emoji">⚡</span>Fast Food</button>
+      <button class="option-btn" data-style="sitdown"><span class="emoji">🍽️</span>Sit-Down</button>
+      <button class="option-btn" data-style="fine"><span class="emoji">🥂</span>Fine Dining</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Zip code -->
+  <div class="screen" id="screen-3">
+    <a class="back-link" data-back="2">&larr; Back to dining style</a>
+    <div class="zip-form">
+      <input type="text" id="zip-input" placeholder="Enter zip / postal code" inputmode="numeric">
+      <p class="zip-hint">We'll search OpenStreetMap for real restaurants nearby.</p>
+      <button id="find-btn">Find Restaurants</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Results -->
+  <div class="screen" id="screen-4">
+    <a class="back-link" data-back="3">&larr; Try a different zip code</a>
+    <div id="results-container"></div>
+  </div>
+
+  <!-- Result -->
+  <div class="screen" id="screen-5">
+    <div class="result">
+      <span class="emoji-big" id="result-emoji">🎉</span>
+      <h2 id="result-title">Tonight's Dinner</h2>
+      <p id="result-desc"></p>
+      <a class="directions" id="result-directions" target="_blank" rel="noopener">Get Directions &rarr;</a>
+    </div>
+    <button class="restart-btn" id="restart">Start Over</button>
+  </div>
+</div>
+
+<script>
+  const cuisineEmoji = { mexican: "🌮", asian: "🍜", american: "🍔", italian: "🍝" };
+  const styleLabel = { fast: "Fast Food", sitdown: "Sit-Down", fine: "Fine Dining" };
+
+  const cuisinePatterns = {
+    mexican: { cuisine: /mexican|tex-mex/, name: /taco|burrito|mexic|cantina|taqueria/ },
+    asian: { cuisine: /asian|chinese|japanese|thai|vietnamese|korean|sushi|noodle|dim_sum|ramen/, name: /sushi|wok|noodle|ramen|pho|thai|chinese|japanese|korean|asian|dim sum/ },
+    american: { cuisine: /american|burger|steak_house|bbq|diner/, name: /burger|grill|bbq|diner|steakhouse|steak house/ },
+    italian: { cuisine: /italian|pizza/, name: /pizza|pasta|italian|trattoria|ristorante/ }
+  };
+
+  let selectedCuisine = null;
+  let selectedStyle = null;
+
+  const screens = document.querySelectorAll(".screen");
+  const dots = document.querySelectorAll(".step-dot");
+
+  function showScreen(n) {
+    screens.forEach(s => s.classList.remove("visible"));
+    document.getElementById("screen-" + n).classList.add("visible");
+    dots.forEach((d, i) => {
+      d.classList.remove("active", "done");
+      if (i + 1 < n) d.classList.add("done");
+      if (i + 1 === n) d.classList.add("active");
+    });
+  }
+
+  document.querySelectorAll("[data-cuisine]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedCuisine = btn.dataset.cuisine;
+      showScreen(2);
+    });
+  });
+
+  document.querySelectorAll("[data-style]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedStyle = btn.dataset.style;
+      showScreen(3);
+    });
+  });
+
+  document.querySelectorAll("[data-back]").forEach(link => {
+    link.addEventListener("click", () => showScreen(Number(link.dataset.back)));
+  });
+
+  document.getElementById("find-btn").addEventListener("click", findRestaurants);
+  document.getElementById("zip-input").addEventListener("keydown", e => {
+    if (e.key === "Enter") findRestaurants();
+  });
+
+  function matchesStyle(tags, styleKey) {
+    if (styleKey === "fast") return tags.amenity === "fast_food";
+    return tags.amenity === "restaurant";
+  }
+
+  function matchesCuisine(tags, cuisineKey) {
+    const cuisineTag = (tags.cuisine || "").toLowerCase();
+    const name = (tags.name || "").toLowerCase();
+    const p = cuisinePatterns[cuisineKey];
+    return p.cuisine.test(cuisineTag) || p.name.test(name);
+  }
+
+  function formatAddress(tags) {
+    const parts = [];
+    if (tags["addr:housenumber"] && tags["addr:street"]) {
+      parts.push(`${tags["addr:housenumber"]} ${tags["addr:street"]}`);
+    } else if (tags["addr:street"]) {
+      parts.push(tags["addr:street"]);
+    }
+    if (tags["addr:city"]) parts.push(tags["addr:city"]);
+    return parts.length ? parts.join(", ") : "Address unavailable";
+  }
+
+  function distanceMiles(lat1, lon1, lat2, lon2) {
+    const R = 3958.8;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function normalizeElement(el, origin) {
+    const lat = el.type === "node" ? el.lat : (el.center ? el.center.lat : null);
+    const lon = el.type === "node" ? el.lon : (el.center ? el.center.lon : null);
+    if (lat == null || lon == null) return null;
+    const tags = el.tags || {};
+    if (!tags.name) return null;
+    return {
+      name: tags.name,
+      tags,
+      lat,
+      lon,
+      distance: distanceMiles(origin.lat, origin.lon, lat, lon)
+    };
+  }
+
+  async function geocodeZip(zip) {
+    const url = `https://nominatim.openstreetmap.org/search?postalcode=${encodeURIComponent(zip)}&format=json&limit=1`;
+    const res = await fetch(url, { headers: { "Accept": "application/json" } });
+    if (!res.ok) throw new Error("Geocoding request failed.");
+    const data = await res.json();
+    if (!data.length) throw new Error("Couldn't find that zip/postal code.");
+    return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+  }
+
+  const OVERPASS_MIRRORS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.openstreetmap.ru/api/interpreter"
+  ];
+
+  async function fetchNearby(lat, lon, radiusMeters, amenityType) {
+    const query = `[out:json][timeout:12];(node["amenity"="${amenityType}"](around:${radiusMeters},${lat},${lon});way["amenity"="${amenityType}"](around:${radiusMeters},${lat},${lon}););out center tags;`;
+
+    let lastError;
+    for (const mirror of OVERPASS_MIRRORS) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 9000);
+        const res = await fetch(mirror, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "data=" + encodeURIComponent(query),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        return data.elements;
+      } catch (err) {
+        lastError = err;
+      }
+    }
+    throw new Error("Restaurant search failed: " + (lastError ? lastError.message : "unknown error"));
+  }
+
+  function renderStatus(message, isSpinner) {
+    document.getElementById("results-container").innerHTML = `
+      <div class="status-box">
+        ${isSpinner ? '<div class="spinner"></div>' : ""}
+        <div>${message}</div>
+      </div>`;
+  }
+
+  function renderError(message) {
+    document.getElementById("results-container").innerHTML = `<div class="error-box">${message}</div>`;
+  }
+
+  async function findRestaurants() {
+    const zip = document.getElementById("zip-input").value.trim();
+    if (!zip) return;
+    showScreen(4);
+    renderStatus("Looking up that zip code...", true);
+
+    let origin;
+    try {
+      origin = await geocodeZip(zip);
+    } catch (err) {
+      renderError(`⚠️ ${err.message} Double-check the zip code and try again.`);
+      return;
+    }
+
+    renderStatus("Searching nearby restaurants...", true);
+
+    const radii = [8046, 24140]; // ~5, 15 miles
+    const amenityType = selectedStyle === "fast" ? "fast_food" : "restaurant";
+    let matched = [];
+    let relaxedCuisine = false;
+
+    try {
+      for (let i = 0; i < radii.length; i++) {
+        const elements = await fetchNearby(origin.lat, origin.lon, radii[i], amenityType);
+        const named = elements
+          .map(el => normalizeElement(el, origin))
+          .filter(Boolean)
+          .filter(e => matchesStyle(e.tags, selectedStyle));
+
+        const both = named.filter(e => matchesCuisine(e.tags, selectedCuisine));
+
+        if (both.length >= 3) {
+          matched = both;
+          relaxedCuisine = false;
+          break;
+        }
+
+        if (i === radii.length - 1) {
+          if (both.length > 0) {
+            matched = both;
+          } else {
+            matched = named;
+            relaxedCuisine = true;
+          }
+        }
+      }
+    } catch (err) {
+      renderError(`⚠️ ${err.message} The restaurant search service may be busy — try again in a moment.`);
+      return;
+    }
+
+    if (matched.length === 0) {
+      renderError(`No ${styleLabel[selectedStyle].toLowerCase()} restaurants found near that area, even after widening the search. Try a different zip code or dining style.`);
+      return;
+    }
+
+    matched.sort((a, b) => a.distance - b.distance);
+    const top = matched.slice(0, 3);
+
+    const container = document.getElementById("results-container");
+    container.innerHTML = "";
+
+    if (relaxedCuisine) {
+      const note = document.createElement("div");
+      note.className = "note-box";
+      note.textContent = `Couldn't find enough ${selectedCuisine} spots nearby, so these are the closest ${styleLabel[selectedStyle].toLowerCase()} places overall.`;
+      container.appendChild(note);
+    }
+
+    top.forEach(place => {
+      const card = document.createElement("div");
+      card.className = "choice-card";
+      card.innerHTML = `
+        <h3>${place.name}</h3>
+        <p>${formatAddress(place.tags)}</p>
+        <span class="distance">${place.distance.toFixed(1)} mi away</span>`;
+      card.addEventListener("click", () => showResult(place));
+      container.appendChild(card);
+    });
+  }
+
+  function showResult(place) {
+    document.getElementById("result-emoji").textContent = cuisineEmoji[selectedCuisine];
+    document.getElementById("result-title").textContent = place.name;
+    document.getElementById("result-desc").textContent =
+      `${formatAddress(place.tags)} · ${place.distance.toFixed(1)} mi away`;
+    document.getElementById("result-directions").href =
+      `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lon}`;
+    showScreen(5);
+  }
+
+  document.getElementById("restart").addEventListener("click", () => {
+    selectedCuisine = null;
+    selectedStyle = null;
+    document.getElementById("zip-input").value = "";
+    showScreen(1);
+  });
+
+  showScreen(1);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pickleball Tournament Manager</title>
+<style>
+  :root {
+    --teal: #0d7377;
+    --teal-dark: #0a5a5d;
+    --lime: #c4f000;
+    --bg1: #14586b;
+    --bg2: #0d7377;
+    --card: #ffffff;
+    --text: #23303a;
+    --muted: #6b7a84;
+    --line: #e7edf0;
+    --winA: #0d7377;
+    --winB: #d9822b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    color: var(--text);
+    padding: 24px;
+  }
+  .app {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+  }
+  header h1 { margin: 0 0 4px; font-size: 1.8rem; }
+  header p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+
+  .main-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.18);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.3); }
+  .tab-btn.active { background: var(--lime); color: #1a2a1a; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .sub-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .sub-tab-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--teal);
+    border-radius: 999px;
+    background: white;
+    color: var(--teal);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .sub-tab-btn.active { background: var(--teal); color: white; }
+  .sub-panel { display: none; }
+  .sub-panel.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 22px;
+    margin-bottom: 20px;
+  }
+  .card h2 {
+    margin: 0 0 16px;
+    font-size: 1.15rem;
+    color: var(--teal-dark);
+  }
+  .panel-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 800px) {
+    .panel-grid { grid-template-columns: 1fr; }
+  }
+
+  form { display: flex; flex-direction: column; gap: 12px; }
+  label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+  input, select {
+    padding: 10px 12px;
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+  }
+  input:focus, select:focus { border-color: var(--teal); }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .btn-primary {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 10px;
+    background: var(--teal);
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--teal-dark); }
+  .btn-primary:disabled { background: #b8c2c7; cursor: not-allowed; }
+
+  .btn-secondary {
+    padding: 9px 14px;
+    border: 2px solid var(--teal);
+    border-radius: 10px;
+    background: white;
+    color: var(--teal);
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  .btn-secondary:hover { background: #eefaf9; }
+
+  .btn-danger {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    background: #fdeceb;
+    color: #c0392b;
+    font-weight: 600;
+    font-size: 0.78rem;
+  }
+  .btn-danger:hover { background: #fadbd8; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .table-wrap { max-height: 420px; overflow-y: auto; }
+  .empty-note { color: var(--muted); font-size: 0.88rem; padding: 10px 0; }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .pill.F { background: #ffe3ef; color: #c2185b; }
+  .pill.M { background: #e1eefe; color: #1565c0; }
+
+  .entrant-row, .roster-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #f6f9fa;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+  }
+  .builder-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-bottom: 14px; }
+  .builder-controls label { min-width: 160px; }
+
+  .tourney-list-item, .team-list-item, .dual-list-item {
+    padding: 12px 14px;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .tourney-list-item:hover, .team-list-item:hover { border-color: var(--teal); }
+  .tourney-list-item.active { border-color: var(--teal); background: #f2fbfa; }
+  .tourney-list-item h3, .team-list-item h3 { margin: 0 0 4px; font-size: 1rem; }
+  .tourney-list-item p, .team-list-item p { margin: 0; font-size: 0.8rem; color: var(--muted); }
+
+  .bracket-scroll { overflow-x: auto; padding: 10px 0; }
+  .bracket {
+    display: flex;
+    gap: 46px;
+    min-width: max-content;
+    padding: 10px;
+  }
+  .round {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-width: 220px;
+  }
+  .round-label {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+  .match-box {
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 14px 0;
+    background: white;
+  }
+  .match-slot {
+    padding: 9px 12px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .match-slot:last-child { border-bottom: none; }
+  .match-slot.tbd { color: var(--muted); font-style: italic; cursor: default; }
+  .match-slot.bye { color: var(--muted); cursor: default; }
+  .match-slot.winner { background: #eafaf1; font-weight: 700; }
+  .match-slot.winner::before { content: "\2713  "; color: #1e8e5a; }
+  .match-slot .rating-tag { color: var(--muted); font-size: 0.75rem; }
+  .match-slot:not(.tbd):not(.bye):hover { background: #f2fbfa; }
+
+  .match-score-input {
+    width: 100%;
+    margin-top: -8px;
+    margin-bottom: 14px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    border: 2px solid var(--line);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .match-score-input:focus { border-color: var(--teal); color: var(--text); }
+
+  .champion-banner {
+    text-align: center;
+    background: linear-gradient(135deg, var(--lime), #9ede00);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #223311;
+  }
+  .champion-banner .trophy { font-size: 2rem; display: block; margin-bottom: 6px; }
+
+  .event-card {
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .event-card.decided { border-color: var(--teal); background: #f8fefe; }
+  .event-card h4 { margin: 0 0 10px; font-size: 0.95rem; color: var(--teal-dark); }
+  .event-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .event-side h5 { margin: 0 0 6px; font-size: 0.8rem; color: var(--muted); }
+  .event-side .player-selects { display: flex; flex-direction: column; gap: 6px; }
+  .event-actions { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .win-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 2px solid var(--teal);
+    background: white;
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 0.82rem;
+  }
+  .win-btn.chosen { background: var(--teal); color: white; }
+  .score-input { width: 110px; }
+
+  .dual-score-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f6f9fa;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .dual-score-banner .score-num { font-size: 1.4rem; color: var(--teal-dark); }
+
+  .note-banner {
+    background: #fff8e6;
+    border: 2px solid #f4d76e;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: #8a6d00;
+    margin-bottom: 14px;
+  }
+
+  .standings-table td.num, .standings-table th.num { text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <h1>🏓 Pickleball Brackets</h1>
+    <p>Register players, run bracket tournaments, and manage league matches.</p>
+  </header>
+
+  <nav class="main-tabs">
+    <button class="tab-btn active" data-tab="players">Players</button>
+    <button class="tab-btn" data-tab="tournaments">Tournaments</button>
+    <button class="tab-btn" data-tab="league">League Play</button>
+  </nav>
+
+  <!-- PLAYERS -->
+  <section id="tab-players" class="tab-panel active">
+    <div class="panel-grid">
+      <div class="card">
+        <h2>Register Player</h2>
+        <form id="player-form">
+          <label>Name <input type="text" id="p-name" required></label>
+          <label>Age <input type="number" id="p-age" min="1" max="120" required></label>
+          <label>Gender
+            <select id="p-gender">
+              <option value="F">Female</option>
+              <option value="M">Male</option>
+            </select>
+          </label>
+          <label>Skill Rating <input type="number" id="p-rating" step="0.1" min="1" max="8" placeholder="e.g. 3.5" required></label>
+          <button type="submit" class="btn-primary">Add Player</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2 style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          Registered Players (<span id="player-count">0</span>)
+          <span style="display:flex;gap:8px;">
+            <button type="button" class="btn-secondary" onclick="deleteSelectedPlayers()">Delete Selected</button>
+            <button type="button" class="btn-danger" onclick="deleteAllPlayers()">Delete All</button>
+          </span>
+        </h2>
+        <div id="players-list" class="table-wrap"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOURNAMENTS -->
+  <section id="tab-tournaments" class="tab-panel">
+    <div class="panel-grid">
+      <div>
+        <div class="card">
+          <h2>Create Tournament</h2>
+          <form id="tourney-form">
+            <label>Tournament Name <input type="text" id="t-name" required></label>
+            <label>Date <input type="date" id="t-date" required></label>
+            <label>Format
+              <select id="t-type">
+                <option value="singles">Singles</option>
+                <option value="doubles">Doubles</option>
+                <option value="mixed">Mixed Doubles</option>
+              </select>
+            </label>
+          </form>
+          <div id="entrant-builder"></div>
+          <button id="generate-bracket-btn" class="btn-primary" style="width:100%;margin-top:10px;">Generate Bracket</button>
+        </div>
+        <div class="card">
+          <h2>Tournaments</h2>
+          <div id="tournaments-list"></div>
+        </div>
+      </div>
+      <div id="bracket-view"></div>
+    </div>
+  </section>
+
+  <!-- LEAGUE -->
+  <section id="tab-league" class="tab-panel">
+    <div class="sub-tabs">
+      <button class="sub-tab-btn active" data-subtab="teams">Teams</button>
+      <button class="sub-tab-btn" data-subtab="season">Season Schedule</button>
+      <button class="sub-tab-btn" data-subtab="matches">Schedule &amp; Score</button>
+      <button class="sub-tab-btn" data-subtab="standings">Standings</button>
+    </div>
+
+    <div id="sub-teams" class="sub-panel active">
+      <div class="panel-grid">
+        <div class="card">
+          <h2>Create Team</h2>
+          <form id="team-form">
+            <label>Team Name <input type="text" id="team-name" required></label>
+            <button type="submit" class="btn-primary">Create Team</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Team Rosters (5 players each)</h2>
+          <div id="teams-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sub-season" class="sub-panel">
+      <div class="card">
+        <h2>Season Schedule</h2>
+        <div class="builder-controls">
+          <label>Number of Weeks <input type="number" id="season-weeks" min="1" max="52" value="10"></label>
+          <button id="generate-season-btn" class="btn-primary">Generate Round-Robin Schedule</button>
+          <button id="clear-season-btn" class="btn-danger">Clear Season Schedule</button>
+        </div>
+        <p class="empty-note">Best with 10+ teams. Each week is a round — every team plays a different opponent, rotating fairly. If there are more weeks than a single round-robin needs, it repeats with home/away swapped to fill out the season. You can still edit or delete any individual matchup below.</p>
+      </div>
+      <div id="season-schedule-view"></div>
+    </div>
+
+    <div id="sub-matches" class="sub-panel">
+      <div class="card">
+        <h2>Schedule League Match</h2>
+        <div class="builder-controls">
+          <label>Team A <select id="dm-teamA"></select></label>
+          <label>Team B <select id="dm-teamB"></select></label>
+          <button id="create-dual-btn" class="btn-primary">Start League Match</button>
+        </div>
+        <p class="empty-note">Format: 1) Women's Doubles &nbsp;2) Men's Doubles &nbsp;3&amp;4) Mixed Doubles &nbsp;5) Dreambreaker (only if tied 2-2).</p>
+      </div>
+      <div id="dual-matches-list"></div>
+    </div>
+
+    <div id="sub-standings" class="sub-panel">
+      <div class="card">
+        <h2>League Standings</h2>
+        <div id="standings-view"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // ---------- State ----------
+  const STORAGE_KEY = "pbTourneyAppData";
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return { players: [], tournaments: [], leagueTeams: [], dualMatches: [] };
+  }
+  let state = loadState();
+  function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+  // ---------- Tab Navigation ----------
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+  document.querySelectorAll(".sub-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".sub-tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".sub-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("sub-" + btn.dataset.subtab).classList.add("active");
+      if (btn.dataset.subtab === "standings") renderStandings();
+      if (btn.dataset.subtab === "matches") renderDualTeamSelects();
+      if (btn.dataset.subtab === "season") renderSeasonSchedule();
+    });
+  });
+
+  // ================= PLAYERS =================
+  document.getElementById("player-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = document.getElementById("p-name").value.trim();
+    const age = parseInt(document.getElementById("p-age").value, 10);
+    const gender = document.getElementById("p-gender").value;
+    const rating = parseFloat(document.getElementById("p-rating").value);
+    if (!name || !age || isNaN(rating)) return;
+    state.players.push({ id: uid(), name, age, gender, rating });
+    saveState();
+    e.target.reset();
+    renderPlayers();
+  });
+
+  const selectedPlayerIds = new Set();
+
+  function deletePlayer(id) {
+    state.players = state.players.filter(p => p.id !== id);
+    selectedPlayerIds.delete(id);
+    saveState();
+    renderPlayers();
+  }
+
+  function deleteAllPlayers() {
+    if (state.players.length === 0) return;
+    if (!confirm(`Delete all ${state.players.length} registered players? This cannot be undone.`)) return;
+    state.players = [];
+    selectedPlayerIds.clear();
+    saveState();
+    renderPlayers();
+  }
+
+  function deleteSelectedPlayers() {
+    if (selectedPlayerIds.size === 0) { alert("No players selected."); return; }
+    if (!confirm(`Delete ${selectedPlayerIds.size} selected player(s)? This cannot be undone.`)) return;
+    state.players = state.players.filter(p => !selectedPlayerIds.has(p.id));
+    selectedPlayerIds.clear();
+    saveState();
+    renderPlayers();
+  }
+
+  function togglePlayerSelected(id, checked) {
+    if (checked) selectedPlayerIds.add(id); else selectedPlayerIds.delete(id);
+    const allBox = document.getElementById("select-all-players");
+    if (allBox) allBox.checked = state.players.length > 0 && selectedPlayerIds.size === state.players.length;
+  }
+
+  function toggleSelectAllPlayers(checked) {
+    selectedPlayerIds.clear();
+    if (checked) state.players.forEach(p => selectedPlayerIds.add(p.id));
+    renderPlayers();
+  }
+
+  function renderPlayers() {
+    document.getElementById("player-count").textContent = state.players.length;
+    const container = document.getElementById("players-list");
+    if (state.players.length === 0) {
+      container.innerHTML = '<p class="empty-note">No players registered yet.</p>';
+      return;
+    }
+    const sorted = [...state.players].sort((a, b) => b.rating - a.rating);
+    const allChecked = selectedPlayerIds.size === state.players.length;
+    let html = `<table><thead><tr><th><input type="checkbox" id="select-all-players" onchange="toggleSelectAllPlayers(this.checked)" ${allChecked ? "checked" : ""}></th><th>Name</th><th>Age</th><th>Gender</th><th>Rating</th><th></th></tr></thead><tbody>`;
+    sorted.forEach(p => {
+      html += `<tr>
+        <td><input type="checkbox" onchange="togglePlayerSelected('${p.id}', this.checked)" ${selectedPlayerIds.has(p.id) ? "checked" : ""}></td>
+        <td>${p.name}</td>
+        <td>${p.age}</td>
+        <td><span class="pill ${p.gender}">${p.gender === "F" ? "Women" : "Men"}</span></td>
+        <td>${p.rating.toFixed(1)}</td>
+        <td><button class="btn-danger" onclick="deletePlayer('${p.id}')">Remove</button></td>
+      </tr>`;
+    });
+    html += "</tbody></table>";
+    container.innerHTML = html;
+  }
+
+  // ================= TOURNAMENTS =================
+  let draft = { type: "singles", entrants: [] };
+
+  document.getElementById("t-type").addEventListener("change", e => {
+    draft.type = e.target.value;
+    draft.entrants = [];
+    renderEntrantBuilder();
+  });
+
+  function usedPlayerIds() {
+    const ids = new Set();
+    draft.entrants.forEach(en => en.playerIds.forEach(id => ids.add(id)));
+    return ids;
+  }
+
+  function renderEntrantBuilder() {
+    const container = document.getElementById("entrant-builder");
+    const used = usedPlayerIds();
+    const available = state.players.filter(p => !used.has(p.id));
+
+    let controlsHtml = "";
+    if (draft.type === "singles") {
+      controlsHtml = `
+        <div class="builder-controls">
+          <label>Player <select id="sel-single">${playerOptions(available)}</select></label>
+          <button type="button" class="btn-secondary" onclick="addSinglesEntrant()">Add Entrant</button>
+        </div>`;
+    } else if (draft.type === "doubles") {
+      controlsHtml = `
+        <div class="builder-controls">
+          <label>Player 1 <select id="sel-d1">${playerOptions(available)}</select></label>
+          <label>Player 2 <select id="sel-d2">${playerOptions(available)}</select></label>
+          <button type="button" class="btn-secondary" onclick="addDoublesEntrant()">Add Team</button>
+          <button type="button" class="btn-secondary" onclick="autoPairDoubles()">Auto-Pair Remaining</button>
+        </div>`;
+    } else {
+      const males = available.filter(p => p.gender === "M");
+      const females = available.filter(p => p.gender === "F");
+      controlsHtml = `
+        <div class="builder-controls">
+          <label>Male Player <select id="sel-male">${playerOptions(males)}</select></label>
+          <label>Female Player <select id="sel-female">${playerOptions(females)}</select></label>
+          <button type="button" class="btn-secondary" onclick="addMixedEntrant()">Add Team</button>
+          <button type="button" class="btn-secondary" onclick="autoPairMixed()">Auto-Pair Remaining</button>
+        </div>`;
+    }
+
+    let listHtml = "";
+    if (draft.entrants.length === 0) {
+      listHtml = '<p class="empty-note">No entrants added yet.</p>';
+    } else {
+      listHtml = draft.entrants.map(en => `
+        <div class="entrant-row">
+          <span>${en.label} <span class="rating-tag">(${en.seedRating.toFixed(1)})</span></span>
+          <button class="btn-danger" onclick="removeEntrant('${en.id}')">Remove</button>
+        </div>`).join("");
+    }
+
+    container.innerHTML = controlsHtml + '<div style="margin-top:12px;">' + listHtml + "</div>";
+  }
+
+  function playerOptions(list) {
+    if (list.length === 0) return '<option value="">-- none available --</option>';
+    return list.map(p => `<option value="${p.id}">${p.name} (${p.rating.toFixed(1)})</option>`).join("");
+  }
+
+  function addSinglesEntrant() {
+    const id = document.getElementById("sel-single").value;
+    const p = state.players.find(pl => pl.id === id);
+    if (!p) return;
+    draft.entrants.push({ id: uid(), playerIds: [p.id], label: p.name, seedRating: p.rating });
+    renderEntrantBuilder();
+  }
+
+  function addDoublesEntrant() {
+    const id1 = document.getElementById("sel-d1").value;
+    const id2 = document.getElementById("sel-d2").value;
+    if (!id1 || !id2 || id1 === id2) return;
+    const p1 = state.players.find(pl => pl.id === id1);
+    const p2 = state.players.find(pl => pl.id === id2);
+    if (!p1 || !p2) return;
+    draft.entrants.push({
+      id: uid(), playerIds: [p1.id, p2.id],
+      label: `${p1.name} / ${p2.name}`,
+      seedRating: (p1.rating + p2.rating) / 2
+    });
+    renderEntrantBuilder();
+  }
+
+  function addMixedEntrant() {
+    const idM = document.getElementById("sel-male").value;
+    const idF = document.getElementById("sel-female").value;
+    if (!idM || !idF) return;
+    const pM = state.players.find(pl => pl.id === idM);
+    const pF = state.players.find(pl => pl.id === idF);
+    if (!pM || !pF) return;
+    draft.entrants.push({
+      id: uid(), playerIds: [pM.id, pF.id],
+      label: `${pM.name} / ${pF.name}`,
+      seedRating: (pM.rating + pF.rating) / 2
+    });
+    renderEntrantBuilder();
+  }
+
+  function autoPairDoubles() {
+    const used = usedPlayerIds();
+    const available = [...state.players.filter(p => !used.has(p.id))].sort((a, b) => b.rating - a.rating);
+    for (let i = 0; i + 1 < available.length; i += 2) {
+      const p1 = available[i], p2 = available[i + 1];
+      draft.entrants.push({
+        id: uid(), playerIds: [p1.id, p2.id],
+        label: `${p1.name} / ${p2.name}`,
+        seedRating: (p1.rating + p2.rating) / 2
+      });
+    }
+    renderEntrantBuilder();
+  }
+
+  function autoPairMixed() {
+    const used = usedPlayerIds();
+    const males = state.players.filter(p => !used.has(p.id) && p.gender === "M").sort((a, b) => b.rating - a.rating);
+    const females = state.players.filter(p => !used.has(p.id) && p.gender === "F").sort((a, b) => b.rating - a.rating);
+    const n = Math.min(males.length, females.length);
+    for (let i = 0; i < n; i++) {
+      const pM = males[i], pF = females[i];
+      draft.entrants.push({
+        id: uid(), playerIds: [pM.id, pF.id],
+        label: `${pM.name} / ${pF.name}`,
+        seedRating: (pM.rating + pF.rating) / 2
+      });
+    }
+    renderEntrantBuilder();
+  }
+
+  function removeEntrant(id) {
+    draft.entrants = draft.entrants.filter(en => en.id !== id);
+    renderEntrantBuilder();
+  }
+
+  function nextPow2(n) { let p = 1; while (p < n) p *= 2; return p; }
+
+  function seedOrder(n) {
+    let order = [1, 2];
+    while (order.length < n) {
+      const size = order.length * 2;
+      const next = [];
+      order.forEach(s => { next.push(s); next.push(size + 1 - s); });
+      order = next;
+    }
+    return order;
+  }
+
+  function applyWinner(rounds, r, m) {
+    const match = rounds[r][m];
+    if (!match.winner) return;
+    const winnerEntrant = match.winner === "A" ? match.a : match.b;
+    if (r + 1 < rounds.length) {
+      const nextMatch = rounds[r + 1][Math.floor(m / 2)];
+      if (m % 2 === 0) nextMatch.a = winnerEntrant; else nextMatch.b = winnerEntrant;
+    }
+  }
+
+  document.getElementById("generate-bracket-btn").addEventListener("click", () => {
+    const name = document.getElementById("t-name").value.trim();
+    const date = document.getElementById("t-date").value;
+    if (!name) { alert("Please enter a tournament name."); return; }
+    if (!date) { alert("Please choose a tournament date."); return; }
+    if (draft.entrants.length < 2) { alert("Add at least 2 entrants."); return; }
+
+    const seeded = [...draft.entrants].sort((a, b) => b.seedRating - a.seedRating)
+      .map((en, i) => ({ ...en, seed: i + 1 }));
+
+    const bracketSize = nextPow2(seeded.length);
+    const order = seedOrder(bracketSize);
+    const slots = order.map(seedNum => seeded.find(en => en.seed === seedNum) || null);
+
+    const round0 = [];
+    for (let i = 0; i < slots.length; i += 2) {
+      const a = slots[i], b = slots[i + 1];
+      const match = { id: uid(), a, b, winner: null };
+      if (a && !b) match.winner = "A";
+      if (b && !a) match.winner = "B";
+      round0.push(match);
+    }
+    const rounds = [round0];
+    let count = round0.length;
+    while (count > 1) {
+      const r = [];
+      for (let i = 0; i < count / 2; i++) r.push({ id: uid(), a: null, b: null, winner: null });
+      rounds.push(r);
+      count /= 2;
+    }
+    rounds[0].forEach((m, i) => applyWinner(rounds, 0, i));
+
+    const tournament = {
+      id: uid(), name, date, type: draft.type,
+      entrants: seeded, rounds, createdAt: Date.now()
+    };
+    state.tournaments.push(tournament);
+    saveState();
+
+    draft = { type: document.getElementById("t-type").value, entrants: [] };
+    document.getElementById("tourney-form").reset();
+    document.getElementById("t-date").value = todayDateString();
+    renderEntrantBuilder();
+    renderTournamentsList();
+    activeTournamentId = tournament.id;
+    renderBracketView();
+  });
+
+  let activeTournamentId = null;
+
+  function todayDateString() {
+    const d = new Date();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${d.getFullYear()}-${mm}-${dd}`;
+  }
+
+  function formatDisplayDate(dateStr) {
+    if (!dateStr) return "";
+    const [y, m, d] = dateStr.split("-");
+    return `${m}/${d}/${y}`;
+  }
+
+  function deleteTournament(id) {
+    if (!confirm("Delete this tournament? This cannot be undone.")) return;
+    state.tournaments = state.tournaments.filter(t => t.id !== id);
+    saveState();
+    if (activeTournamentId === id) activeTournamentId = null;
+    renderTournamentsList();
+    renderBracketView();
+  }
+
+  function renderTournamentsList() {
+    const container = document.getElementById("tournaments-list");
+    if (state.tournaments.length === 0) {
+      container.innerHTML = '<p class="empty-note">No tournaments created yet.</p>';
+      return;
+    }
+    const typeLabel = { singles: "Singles", doubles: "Doubles", mixed: "Mixed Doubles" };
+    container.innerHTML = [...state.tournaments].reverse().map(t => `
+      <div class="tourney-list-item ${t.id === activeTournamentId ? 'active' : ''}" onclick="viewTournament('${t.id}')">
+        <h3 style="display:flex;justify-content:space-between;align-items:center;">
+          ${t.name}
+          <button class="btn-danger" onclick="event.stopPropagation(); deleteTournament('${t.id}')">Delete</button>
+        </h3>
+        <p>${formatDisplayDate(t.date)} &middot; ${typeLabel[t.type]} &middot; ${t.entrants.length} entrants</p>
+      </div>`).join("");
+  }
+
+  function viewTournament(id) {
+    activeTournamentId = id;
+    renderTournamentsList();
+    renderBracketView();
+  }
+
+  function selectWinner(tournamentId, roundIdx, matchIdx, slot) {
+    const t = state.tournaments.find(tt => tt.id === tournamentId);
+    if (!t) return;
+    const match = t.rounds[roundIdx][matchIdx];
+    if (!match.a || !match.b) return;
+    match.winner = slot;
+    applyWinner(t.rounds, roundIdx, matchIdx);
+    saveState();
+    renderBracketView();
+  }
+
+  function setMatchScore(tournamentId, roundIdx, matchIdx, value) {
+    const t = state.tournaments.find(tt => tt.id === tournamentId);
+    if (!t) return;
+    t.rounds[roundIdx][matchIdx].score = value;
+    saveState();
+  }
+
+  function renderBracketView() {
+    const container = document.getElementById("bracket-view");
+    const t = state.tournaments.find(tt => tt.id === activeTournamentId);
+    if (!t) {
+      container.innerHTML = '<div class="card"><p class="empty-note">Select or create a tournament to view its bracket.</p></div>';
+      return;
+    }
+
+    const roundNames = t.rounds.map((r, i) => {
+      const remaining = r.length;
+      if (i === t.rounds.length - 1) return "Final";
+      if (remaining === 2) return "Semifinals";
+      if (remaining === 4) return "Quarterfinals";
+      return `Round ${i + 1}`;
+    });
+
+    let championHtml = "";
+    const finalMatch = t.rounds[t.rounds.length - 1][0];
+    if (finalMatch.winner) {
+      const champ = finalMatch.winner === "A" ? finalMatch.a : finalMatch.b;
+      championHtml = `<div class="champion-banner"><span class="trophy">🏆</span>Champion: ${champ.label}</div>`;
+    }
+
+    let bracketHtml = '<div class="bracket">';
+    t.rounds.forEach((round, rIdx) => {
+      bracketHtml += `<div class="round"><div class="round-label">${roundNames[rIdx]}</div>`;
+      round.forEach((match, mIdx) => {
+        bracketHtml += '<div class="match-box">';
+        ["a", "b"].forEach((side, sIdx) => {
+          const entrant = match[side];
+          const sideLetter = side.toUpperCase();
+          const isWinner = match.winner === sideLetter;
+          let cls = "match-slot";
+          let label;
+          if (entrant === null) { cls += " tbd"; label = "TBD"; }
+          else { label = `${entrant.label} <span class="rating-tag">(${entrant.seedRating.toFixed(1)})</span>`; }
+          if (isWinner) cls += " winner";
+          const clickable = match.a && match.b && !match.winner;
+          bracketHtml += `<div class="${cls}" ${clickable ? `onclick="selectWinner('${t.id}',${rIdx},${mIdx},'${sideLetter}')"` : ""}>${label}</div>`;
+        });
+        bracketHtml += "</div>";
+        if (match.a && match.b) {
+          const scoreVal = match.score ? match.score.replace(/"/g, "&quot;") : "";
+          bracketHtml += `<input type="text" class="match-score-input" placeholder="Score e.g. 11-7, 11-9" value="${scoreVal}" onchange="setMatchScore('${t.id}',${rIdx},${mIdx},this.value)">`;
+        }
+      });
+      bracketHtml += "</div>";
+    });
+    bracketHtml += "</div>";
+
+    container.innerHTML = `<div class="card"><h2>${t.name} <span style="color:var(--muted);font-weight:400;font-size:0.85rem;">&middot; ${formatDisplayDate(t.date)}</span></h2>${championHtml}<div class="bracket-scroll">${bracketHtml}</div></div>`;
+  }
+
+  // ================= LEAGUE: TEAMS =================
+  document.getElementById("team-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = document.getElementById("team-name").value.trim();
+    if (!name) return;
+    state.leagueTeams.push({ id: uid(), name, roster: [] });
+    saveState();
+    e.target.reset();
+    renderTeams();
+    renderDualTeamSelects();
+  });
+
+  function addToRoster(teamId, playerId) {
+    if (!playerId) return;
+    const team = state.leagueTeams.find(t => t.id === teamId);
+    const player = state.players.find(p => p.id === playerId);
+    if (!team || !player || team.roster.length >= 5) return;
+    if (team.roster.some(r => r.playerId === playerId)) return;
+    team.roster.push({ playerId: player.id, name: player.name, gender: player.gender, rating: player.rating });
+    saveState();
+    renderTeams();
+  }
+
+  function removeFromRoster(teamId, playerId) {
+    const team = state.leagueTeams.find(t => t.id === teamId);
+    if (!team) return;
+    team.roster = team.roster.filter(r => r.playerId !== playerId);
+    saveState();
+    renderTeams();
+  }
+
+  function deleteTeam(teamId) {
+    state.leagueTeams = state.leagueTeams.filter(t => t.id !== teamId);
+    saveState();
+    renderTeams();
+    renderDualTeamSelects();
+  }
+
+  function renderTeams() {
+    const container = document.getElementById("teams-list");
+    if (state.leagueTeams.length === 0) {
+      container.innerHTML = '<p class="empty-note">No league teams created yet.</p>';
+      return;
+    }
+    container.innerHTML = state.leagueTeams.map(team => {
+      const women = team.roster.filter(r => r.gender === "F").length;
+      const men = team.roster.filter(r => r.gender === "M").length;
+      const rosterIds = new Set(team.roster.map(r => r.playerId));
+      const available = state.players.filter(p => !rosterIds.has(p.id));
+      const warn = (women < 2 || men < 2)
+        ? `<div class="note-banner">Needs at least 2 women and 2 men on roster to fill all doubles slots (currently ${women}W / ${men}M).</div>` : "";
+      const rosterHtml = team.roster.length === 0
+        ? '<p class="empty-note">No players on roster.</p>'
+        : team.roster.map(r => `
+            <div class="roster-row">
+              <span>${r.name} <span class="pill ${r.gender}">${r.gender === "F" ? "W" : "M"}</span> <span class="rating-tag">(${r.rating.toFixed(1)})</span></span>
+              <button class="btn-danger" onclick="removeFromRoster('${team.id}','${r.playerId}')">Remove</button>
+            </div>`).join("");
+      const addControl = team.roster.length >= 5
+        ? '<p class="empty-note">Roster full (5/5).</p>'
+        : `<div class="builder-controls" style="margin-top:10px;">
+            <label>Add Player <select id="add-sel-${team.id}">${playerOptions(available)}</select></label>
+            <button type="button" class="btn-secondary" onclick="addToRoster('${team.id}', document.getElementById('add-sel-${team.id}').value)">Add</button>
+          </div>`;
+      return `
+        <div class="card" style="box-shadow:none;border:2px solid var(--line);">
+          <h2 style="display:flex;justify-content:space-between;align-items:center;">
+            ${team.name} <button class="btn-danger" onclick="deleteTeam('${team.id}')">Delete Team</button>
+          </h2>
+          ${warn}
+          ${rosterHtml}
+          ${addControl}
+        </div>`;
+    }).join("");
+  }
+
+  // ================= LEAGUE: DUAL MATCHES =================
+  function renderDualTeamSelects() {
+    const selA = document.getElementById("dm-teamA");
+    const selB = document.getElementById("dm-teamB");
+    const opts = state.leagueTeams.map(t => `<option value="${t.id}">${t.name}</option>`).join("");
+    selA.innerHTML = opts || '<option value="">-- create teams first --</option>';
+    selB.innerHTML = opts || '<option value="">-- create teams first --</option>';
+  }
+
+  function makeEmptyEvent(key, label) {
+    return { key, label, teamA: [], teamB: [], winner: null, score: "" };
+  }
+
+  function buildEventSet() {
+    return [
+      makeEmptyEvent("womens", "Match 1: Women's Doubles"),
+      makeEmptyEvent("mens", "Match 2: Men's Doubles"),
+      makeEmptyEvent("mixed1", "Match 3: Mixed Doubles"),
+      makeEmptyEvent("mixed2", "Match 4: Mixed Doubles"),
+      makeEmptyEvent("dreambreaker", "Match 5: Dreambreaker")
+    ];
+  }
+
+  document.getElementById("create-dual-btn").addEventListener("click", () => {
+    const teamAId = document.getElementById("dm-teamA").value;
+    const teamBId = document.getElementById("dm-teamB").value;
+    if (!teamAId || !teamBId || teamAId === teamBId) { alert("Choose two different teams."); return; }
+    const dual = {
+      id: uid(), teamAId, teamBId,
+      events: buildEventSet(),
+      createdAt: Date.now()
+    };
+    state.dualMatches.push(dual);
+    saveState();
+    renderDualMatches();
+  });
+
+  function deleteDualMatch(id) {
+    state.dualMatches = state.dualMatches.filter(d => d.id !== id);
+    expandedDualIds.delete(id);
+    saveState();
+    refreshMatchViews();
+  }
+
+  // ---- Season Schedule (round robin) ----
+  const expandedDualIds = new Set();
+
+  function toggleMatchExpanded(id) {
+    if (expandedDualIds.has(id)) expandedDualIds.delete(id); else expandedDualIds.add(id);
+    renderSeasonSchedule();
+  }
+
+  function generateRoundRobinSchedule() {
+    const totalWeeks = parseInt(document.getElementById("season-weeks").value, 10) || 10;
+    const teamIds = state.leagueTeams.map(t => t.id);
+    if (teamIds.length < 2) { alert("Create at least 2 league teams first."); return; }
+
+    const hasExisting = state.dualMatches.some(d => d.week);
+    if (hasExisting) {
+      if (!confirm("This replaces the current season schedule (any scores already entered in it will be lost). Manually-scheduled matches are not affected. Continue?")) return;
+      state.dualMatches = state.dualMatches.filter(d => !d.week);
+    }
+
+    let teams = [...teamIds];
+    if (teams.length % 2 !== 0) teams.push(null); // bye
+    const n = teams.length;
+    const roundsPerCycle = n - 1;
+
+    const cyclePairings = [];
+    let arr = [...teams];
+    for (let r = 0; r < roundsPerCycle; r++) {
+      const pairs = [];
+      for (let i = 0; i < n / 2; i++) {
+        const t1 = arr[i], t2 = arr[n - 1 - i];
+        if (t1 !== null && t2 !== null) pairs.push([t1, t2]);
+      }
+      cyclePairings.push(pairs);
+      const fixed = arr[0];
+      const rest = arr.slice(1);
+      rest.unshift(rest.pop());
+      arr = [fixed, ...rest];
+    }
+
+    const weeks = [];
+    let cycle = 0;
+    while (weeks.length < totalWeeks) {
+      const roundsThisCycle = cyclePairings.map(pairs => cycle % 2 === 1 ? pairs.map(([a, b]) => [b, a]) : pairs);
+      weeks.push(...roundsThisCycle);
+      cycle++;
+    }
+    const finalWeeks = weeks.slice(0, totalWeeks);
+
+    state.seasonWeeks = totalWeeks;
+    finalWeeks.forEach((pairs, idx) => {
+      pairs.forEach(([teamAId, teamBId]) => {
+        state.dualMatches.push({
+          id: uid(), teamAId, teamBId, week: idx + 1,
+          events: buildEventSet(),
+          createdAt: Date.now()
+        });
+      });
+    });
+    saveState();
+    renderSeasonSchedule();
+  }
+
+  function clearSeasonSchedule() {
+    if (!state.dualMatches.some(d => d.week)) return;
+    if (!confirm("Delete the entire season schedule? All season matchup results will be lost. Manually-scheduled matches are not affected.")) return;
+    state.dualMatches = state.dualMatches.filter(d => !d.week);
+    saveState();
+    renderSeasonSchedule();
+  }
+
+  document.getElementById("generate-season-btn").addEventListener("click", generateRoundRobinSchedule);
+  document.getElementById("clear-season-btn").addEventListener("click", clearSeasonSchedule);
+
+  function eventPlayerPool(team, eventKey) {
+    if (eventKey === "womens") return team.roster.filter(r => r.gender === "F");
+    if (eventKey === "mens") return team.roster.filter(r => r.gender === "M");
+    if (eventKey === "dreambreaker") return team.roster;
+    return null; // mixed handled separately (male + female select)
+  }
+
+  function refreshMatchViews() {
+    renderDualMatches();
+    renderSeasonSchedule();
+  }
+
+  function setEventPlayer(dualId, eventKey, side, slotIdx, playerId, gender) {
+    const dual = state.dualMatches.find(d => d.id === dualId);
+    const ev = dual.events.find(e => e.key === eventKey);
+    const arr = ev[side];
+    arr[slotIdx] = playerId || null;
+    saveState();
+    refreshMatchViews();
+  }
+
+  function setEventWinner(dualId, eventKey, winnerSide, scoreVal) {
+    const dual = state.dualMatches.find(d => d.id === dualId);
+    const ev = dual.events.find(e => e.key === eventKey);
+    if (ev.teamA.filter(Boolean).length < 2 || ev.teamB.filter(Boolean).length < 2) {
+      alert("Select 2 players per side before recording a winner.");
+      return;
+    }
+    ev.winner = winnerSide;
+    ev.score = scoreVal || "";
+    saveState();
+    refreshMatchViews();
+  }
+
+  function clearEventWinner(dualId, eventKey) {
+    const dual = state.dualMatches.find(d => d.id === dualId);
+    const ev = dual.events.find(e => e.key === eventKey);
+    ev.winner = null;
+    saveState();
+    refreshMatchViews();
+  }
+
+  function playerSelectHtml(dualId, eventKey, side, slotIdx, pool, currentVal, disabled) {
+    const otherVal = null;
+    const options = pool.map(p => `<option value="${p.playerId}" ${p.playerId === currentVal ? "selected" : ""}>${p.name} (${p.rating.toFixed(1)})</option>`).join("");
+    return `<select ${disabled ? "disabled" : ""} onchange="setEventPlayer('${dualId}','${eventKey}','${side}',${slotIdx},this.value)">
+      <option value="">-- select --</option>${options}
+    </select>`;
+  }
+
+  function renderEventCard(dual, ev, teamA, teamB) {
+    const decided = !!ev.winner;
+    const isDream = ev.key === "dreambreaker";
+
+    // Determine if dreambreaker should even be shown
+    if (isDream) {
+      const main = dual.events.slice(0, 4);
+      const decidedCount = main.filter(e => e.winner).length;
+      if (decidedCount < 4) return "";
+      const aWins = main.filter(e => e.winner === "A").length;
+      const bWins = main.filter(e => e.winner === "B").length;
+      if (aWins !== 2 || bWins !== 2) {
+        return `<div class="event-card"><h4>${ev.label}</h4><p class="empty-note">Not needed — match already decided ${Math.max(aWins,bWins)}-${Math.min(aWins,bWins)}.</p></div>`;
+      }
+    }
+
+    let sideAHtml, sideBHtml;
+    if (ev.key === "mixed1" || ev.key === "mixed2") {
+      const aMales = teamA.roster.filter(r => r.gender === "M");
+      const aFemales = teamA.roster.filter(r => r.gender === "F");
+      const bMales = teamB.roster.filter(r => r.gender === "M");
+      const bFemales = teamB.roster.filter(r => r.gender === "F");
+      sideAHtml = playerSelectHtml(dual.id, ev.key, "teamA", 0, aMales, ev.teamA[0], decided) +
+                  playerSelectHtml(dual.id, ev.key, "teamA", 1, aFemales, ev.teamA[1], decided);
+      sideBHtml = playerSelectHtml(dual.id, ev.key, "teamB", 0, bMales, ev.teamB[0], decided) +
+                  playerSelectHtml(dual.id, ev.key, "teamB", 1, bFemales, ev.teamB[1], decided);
+    } else {
+      const poolA = eventPlayerPool(teamA, ev.key);
+      const poolB = eventPlayerPool(teamB, ev.key);
+      sideAHtml = playerSelectHtml(dual.id, ev.key, "teamA", 0, poolA, ev.teamA[0], decided) +
+                  playerSelectHtml(dual.id, ev.key, "teamA", 1, poolA, ev.teamA[1], decided);
+      sideBHtml = playerSelectHtml(dual.id, ev.key, "teamB", 0, poolB, ev.teamB[0], decided) +
+                  playerSelectHtml(dual.id, ev.key, "teamB", 1, poolB, ev.teamB[1], decided);
+    }
+
+    const resultHtml = decided
+      ? `<div class="event-actions">
+           <span>Winner: <strong>${ev.winner === "A" ? teamA.name : teamB.name}</strong>${ev.score ? " (" + ev.score + ")" : ""}</span>
+           <button type="button" class="btn-secondary" onclick="clearEventWinner('${dual.id}','${ev.key}')">Edit Result</button>
+         </div>`
+      : `<div class="event-actions">
+           <button type="button" class="win-btn" onclick="setEventWinner('${dual.id}','${ev.key}','A', document.getElementById('score-${dual.id}-${ev.key}').value)">${teamA.name} Won</button>
+           <button type="button" class="win-btn" onclick="setEventWinner('${dual.id}','${ev.key}','B', document.getElementById('score-${dual.id}-${ev.key}').value)">${teamB.name} Won</button>
+           <input type="text" class="score-input" id="score-${dual.id}-${ev.key}" placeholder="Score e.g. 11-7" value="${ev.score ? ev.score.replace(/"/g, "&quot;") : ""}">
+         </div>`;
+
+    return `
+      <div class="event-card ${decided ? "decided" : ""}">
+        <h4>${ev.label}</h4>
+        <div class="event-sides">
+          <div class="event-side"><h5>${teamA.name}</h5><div class="player-selects">${sideAHtml}</div></div>
+          <div class="event-side"><h5>${teamB.name}</h5><div class="player-selects">${sideBHtml}</div></div>
+        </div>
+        ${resultHtml}
+      </div>`;
+  }
+
+  function matchStatusLabel(dual, teamA, teamB) {
+    const aWins = dual.events.filter(e => e.winner === "A").length;
+    const bWins = dual.events.filter(e => e.winner === "B").length;
+    if (aWins + bWins === 0) return "Not started";
+    if (aWins === 3 || bWins === 3) return `${aWins > bWins ? teamA.name : teamB.name} won ${Math.max(aWins, bWins)}-${Math.min(aWins, bWins)}`;
+    return `In progress (${aWins}-${bWins})`;
+  }
+
+  function renderDualMatchCard(dual, teamA, teamB, expanded) {
+    const aWins = dual.events.filter(e => e.winner === "A").length;
+    const bWins = dual.events.filter(e => e.winner === "B").length;
+    const isMatchOver = aWins === 3 || bWins === 3;
+
+    if (!expanded) {
+      return `
+        <div class="card" style="margin-bottom:12px;">
+          <h2 style="display:flex;justify-content:space-between;align-items:center;font-size:1rem;flex-wrap:wrap;gap:8px;">
+            <span>${teamA.name} vs ${teamB.name}</span>
+            <span style="display:flex;gap:8px;align-items:center;">
+              <span style="font-weight:400;color:var(--muted);font-size:0.82rem;">${matchStatusLabel(dual, teamA, teamB)}</span>
+              <button type="button" class="btn-secondary" onclick="toggleMatchExpanded('${dual.id}')">Score Match</button>
+              <button class="btn-danger" onclick="deleteDualMatch('${dual.id}')">Delete</button>
+            </span>
+          </h2>
+        </div>`;
+    }
+
+    const banner = `
+      <div class="dual-score-banner">
+        <span>${teamA.name}</span>
+        <span class="score-num">${aWins} - ${bWins}</span>
+        <span>${teamB.name}</span>
+      </div>
+      ${isMatchOver ? `<div class="champion-banner"><span class="trophy">🏆</span>${aWins > bWins ? teamA.name : teamB.name} wins the league match!</div>` : ""}`;
+
+    const eventsHtml = dual.events.map(ev => renderEventCard(dual, ev, teamA, teamB)).join("");
+
+    return `
+      <div class="card">
+        <h2 style="display:flex;justify-content:space-between;align-items:center;">
+          ${teamA.name} vs ${teamB.name}
+          <span style="display:flex;gap:8px;">
+            ${dual.week ? `<button type="button" class="btn-secondary" onclick="toggleMatchExpanded('${dual.id}')">Collapse</button>` : ""}
+            <button class="btn-danger" onclick="deleteDualMatch('${dual.id}')">Delete</button>
+          </span>
+        </h2>
+        ${banner}
+        ${eventsHtml}
+      </div>`;
+  }
+
+  function renderDualMatches() {
+    const container = document.getElementById("dual-matches-list");
+    const manual = state.dualMatches.filter(d => !d.week);
+    if (manual.length === 0) {
+      container.innerHTML = '<p class="empty-note">No league matches scheduled yet.</p>';
+      return;
+    }
+    container.innerHTML = [...manual].reverse().map(dual => {
+      const teamA = state.leagueTeams.find(t => t.id === dual.teamAId);
+      const teamB = state.leagueTeams.find(t => t.id === dual.teamBId);
+      if (!teamA || !teamB) return "";
+      return renderDualMatchCard(dual, teamA, teamB, true);
+    }).join("");
+  }
+
+  function renderSeasonSchedule() {
+    const container = document.getElementById("season-schedule-view");
+    const seasonMatches = state.dualMatches.filter(d => d.week);
+    const weeksInput = document.getElementById("season-weeks");
+    if (weeksInput && state.seasonWeeks) weeksInput.value = state.seasonWeeks;
+
+    if (seasonMatches.length === 0) {
+      container.innerHTML = '<p class="empty-note">No season schedule generated yet. Add your teams, then click "Generate Round-Robin Schedule" above.</p>';
+      return;
+    }
+    const totalWeeks = state.seasonWeeks || Math.max(...seasonMatches.map(d => d.week));
+    let html = "";
+    for (let w = 1; w <= totalWeeks; w++) {
+      const weekMatches = seasonMatches.filter(d => d.week === w);
+      const weekBody = weekMatches.length === 0
+        ? '<p class="empty-note">No matchups this week.</p>'
+        : weekMatches.map(dual => {
+            const teamA = state.leagueTeams.find(t => t.id === dual.teamAId);
+            const teamB = state.leagueTeams.find(t => t.id === dual.teamBId);
+            if (!teamA || !teamB) return "";
+            return renderDualMatchCard(dual, teamA, teamB, expandedDualIds.has(dual.id));
+          }).join("");
+      html += `<div class="card" style="background:#f6f9fa;box-shadow:none;border:2px solid var(--line);">
+        <h2 style="font-size:1.05rem;">Week ${w}</h2>
+        ${weekBody}
+      </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  // ================= STANDINGS =================
+  function renderStandings() {
+    const container = document.getElementById("standings-view");
+    if (state.leagueTeams.length === 0) {
+      container.innerHTML = '<p class="empty-note">No league teams yet.</p>';
+      return;
+    }
+    const stats = {};
+    state.leagueTeams.forEach(t => {
+      stats[t.id] = { name: t.name, dualsPlayed: 0, dualsWon: 0, dualsLost: 0, eventsWon: 0, eventsLost: 0 };
+    });
+    state.dualMatches.forEach(dual => {
+      const aWins = dual.events.filter(e => e.winner === "A").length;
+      const bWins = dual.events.filter(e => e.winner === "B").length;
+      const isOver = aWins === 3 || bWins === 3;
+      if (!isOver) return;
+      const sA = stats[dual.teamAId], sB = stats[dual.teamBId];
+      if (!sA || !sB) return;
+      sA.dualsPlayed++; sB.dualsPlayed++;
+      sA.eventsWon += aWins; sA.eventsLost += bWins;
+      sB.eventsWon += bWins; sB.eventsLost += aWins;
+      if (aWins > bWins) { sA.dualsWon++; sB.dualsLost++; } else { sB.dualsWon++; sA.dualsLost++; }
+    });
+    const rows = Object.values(stats).sort((a, b) => b.dualsWon - a.dualsWon || (b.eventsWon - b.eventsLost) - (a.eventsWon - a.eventsLost));
+    let html = `<table class="standings-table"><thead><tr>
+      <th>Team</th><th class="num">Played</th><th class="num">Won</th><th class="num">Lost</th><th class="num">Events W-L</th>
+    </tr></thead><tbody>`;
+    rows.forEach(r => {
+      html += `<tr><td>${r.name}</td><td class="num">${r.dualsPlayed}</td><td class="num">${r.dualsWon}</td><td class="num">${r.dualsLost}</td><td class="num">${r.eventsWon}-${r.eventsLost}</td></tr>`;
+    });
+    html += "</tbody></table>";
+    container.innerHTML = html;
+  }
+
+  // ---------- Init ----------
+  document.getElementById("t-date").value = todayDateString();
+  renderPlayers();
+  renderEntrantBuilder();
+  renderTournamentsList();
+  renderBracketView();
+  renderTeams();
+  renderDualTeamSelects();
+  renderDualMatches();
+  renderSeasonSchedule();
+</script>
+
+</body>
+</html>
