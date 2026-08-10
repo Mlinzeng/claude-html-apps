@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIGA - AI Governance Certificate Prep</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            background: #f5f5f5;
+        }
+
+        .nav-tabs button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .nav-tabs button:hover {
+            background: #e8e8e8;
+            color: #333;
+        }
+
+        .nav-tabs button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .module {
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .module h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .module p {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .module ul {
+            margin-left: 20px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .module ul li {
+            margin-bottom: 8px;
+        }
+
+        .quiz-container {
+            margin-bottom: 30px;
+        }
+
+        .quiz-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            color: #333;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-option {
+            margin: 8px 0;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .quiz-option label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .quiz-option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .quiz-option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .feedback-correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .score-display h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .score-display p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .correct-answer {
+            color: #28a745;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 AIGA Prep</h1>
+            <p>AI Governance Certificate - Study & Practice</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('study')">📚 Study</button>
+            <button class="tab-btn" onclick="switchTab('quiz')">📝 Quiz</button>
+            <button class="tab-btn" onclick="switchTab('progress')">📊 Progress</button>
+        </div>
+
+        <div class="content">
+            <!-- STUDY TAB -->
+            <div id="study" class="tab-content active">
+                <div class="progress-section">
+                    <h3>Your Study Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="studyProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="studyProgressText">0/8 modules completed</div>
+                </div>
+
+                <div class="module">
+                    <h3>1. AI Governance Fundamentals</h3>
+                    <p><strong>What is AI Governance?</strong></p>
+                    <p>AI Governance is the set of processes, policies, and systems used to ensure that AI systems are developed, deployed, and operated responsibly and ethically.</p>
+                    <ul>
+                        <li>Encompasses risk management, compliance, and ethical frameworks</li>
+                        <li>Involves multiple stakeholders: businesses, regulators, technologists, and society</li>
+                        <li>Addresses transparency, accountability, and fairness</li>
+                        <li>Balances innovation with risk mitigation</li>
+                    </ul>
+
+                    <p><strong>Governance vs. Ethics vs. Risk Management</strong></p>
+                    <ul>
+                        <li><strong>AI Ethics:</strong> The normative question of what an AI system <em>should</em> do — values like fairness, dignity, and non-maleficence</li>
+                        <li><strong>AI Risk Management:</strong> The operational discipline of identifying, measuring, and mitigating harms across the AI lifecycle</li>
+                        <li><strong>AI Governance:</strong> The overarching structure — policies, roles, controls, and accountability mechanisms — that operationalizes ethics and risk management into enforceable practice</li>
+                    </ul>
+
+                    <p><strong>Why Governance Matters</strong></p>
+                    <ul>
+                        <li><strong>Trust:</strong> Users, customers, and regulators need assurance that AI decisions are sound and contestable</li>
+                        <li><strong>Legal exposure:</strong> Ungoverned AI creates liability under anti-discrimination, consumer protection, and data protection law</li>
+                        <li><strong>Operational resilience:</strong> Governance catches model failures (drift, bias, security gaps) before they cause harm at scale</li>
+                        <li><strong>Competitive advantage:</strong> Mature governance enables faster, safer scaling of AI rather than slowing it down</li>
+                    </ul>
+
+                    <p><strong>The AI Lifecycle (governance touches every stage)</strong></p>
+                    <ul>
+                        <li><strong>Problem definition & scoping:</strong> Determine if AI is appropriate; define intended use and out-of-scope uses</li>
+                        <li><strong>Data collection & preparation:</strong> Sourcing, labeling, consent, representativeness</li>
+                        <li><strong>Model development & training:</strong> Algorithm selection, hyperparameter tuning, validation</li>
+                        <li><strong>Testing & validation:</strong> Performance, fairness, robustness, and security testing before release</li>
+                        <li><strong>Deployment:</strong> Release gating, human-in-the-loop design, rollback plans</li>
+                        <li><strong>Monitoring & maintenance:</strong> Drift detection, incident response, periodic re-validation</li>
+                        <li><strong>Decommissioning:</strong> Retiring models safely, preserving audit records</li>
+                    </ul>
+
+                    <p><strong>Key Terminology</strong></p>
+                    <ul>
+                        <li><strong>Model:</strong> The trained artifact that maps inputs to outputs</li>
+                        <li><strong>Training data:</strong> Data used to fit model parameters; distinct from validation/test data</li>
+                        <li><strong>Inference:</strong> The act of running a trained model on new input to produce a prediction</li>
+                        <li><strong>Ground truth:</strong> The verified, correct label or outcome used to evaluate model accuracy</li>
+                        <li><strong>Foundation model / general-purpose AI:</strong> A large model trained on broad data and adaptable to many downstream tasks (e.g., LLMs) — subject to distinct regulatory treatment (e.g., under the EU AI Act)</li>
+                        <li><strong>Deployer vs. Provider:</strong> The provider builds/places an AI system on the market; the deployer uses it under its own authority — governance obligations differ between the two</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3>2. Regulatory Landscape</h3>
+                    <p><strong>Key Regulations and Standards</strong></p>
+                    <ul>
+                        <li><strong>EU AI Act:</strong> Classifies AI by risk levels; regulates high-risk applications</li>
+                        <li><strong>GDPR:</strong> Addresses data privacy and algorithmic transparency</li>
+                        <li><strong>Algorithm Auditing:</strong> Requirements for testing and validation</li>
+                        <li><strong>National Standards:</strong> Emerging frameworks in various countries</li>
+                        <li><strong>Industry Standards:</strong> ISO/IEC standards for AI quality and safety</li>
+                    </ul>
+
+                    <p><strong>EU AI Act — Risk Tier Detail</strong></p>
+                    <ul>
+                        <li><strong>Unacceptable risk (banned):</strong> Social scoring by governments, manipulative subliminal techniques, real-time biometric identification in public spaces (with narrow exceptions), untargeted scraping of facial images</li>
+                        <li><strong>High risk:</strong> AI in employment/hiring, credit scoring, education admissions, law enforcement, critical infrastructure, medical devices — requires conformity assessment, risk management system, technical documentation, human oversight, and registration in an EU database</li>
+                        <li><strong>Limited risk:</strong> Chatbots, deepfakes, emotion recognition — subject to transparency obligations (must disclose AI is being used)</li>
+                        <li><strong>Minimal risk:</strong> Spam filters, AI-enabled video games — largely unregulated</li>
+                        <li><strong>General-Purpose AI (GPAI):</strong> Separate obligations for foundation model providers, with extra requirements for models presenting "systemic risk" (based on compute thresholds)</li>
+                    </ul>
+
+                    <p><strong>GDPR & AI</strong></p>
+                    <ul>
+                        <li><strong>Article 22:</strong> Individuals have the right not to be subject to a decision based solely on automated processing (including profiling) that has legal or similarly significant effects</li>
+                        <li><strong>DPIA (Data Protection Impact Assessment):</strong> Required for high-risk processing, including many AI use cases</li>
+                        <li><strong>Data minimization & purpose limitation:</strong> Constrain how training data can be collected and reused</li>
+                        <li><strong>Right to explanation:</strong> Debated concept; GDPR grants a right to "meaningful information about the logic involved" in automated decisions</li>
+                    </ul>
+
+                    <p><strong>NIST AI Risk Management Framework (AI RMF)</strong></p>
+                    <ul>
+                        <li><strong>Govern:</strong> Cultivate a risk-aware culture and organizational structure</li>
+                        <li><strong>Map:</strong> Identify context, intended use, and risks of a specific AI system</li>
+                        <li><strong>Measure:</strong> Analyze, assess, and track risks using quantitative/qualitative methods</li>
+                        <li><strong>Manage:</strong> Prioritize and act on risks, allocate resources, plan responses</li>
+                    </ul>
+
+                    <p><strong>ISO/IEC Standards</strong></p>
+                    <ul>
+                        <li><strong>ISO/IEC 42001:</strong> First international AI Management System (AIMS) standard — certifiable, analogous to ISO 27001 for security</li>
+                        <li><strong>ISO/IEC 23894:</strong> AI risk management guidance</li>
+                        <li><strong>ISO/IEC 23053:</strong> Framework for AI systems using machine learning</li>
+                        <li><strong>ISO/IEC TR 24028:</strong> Overview of trustworthiness in AI</li>
+                    </ul>
+
+                    <p><strong>Other Notable Frameworks & Laws</strong></p>
+                    <ul>
+                        <li><strong>OECD AI Principles:</strong> International standard for trustworthy AI, adopted by 40+ countries</li>
+                        <li><strong>US Colorado AI Act:</strong> First comprehensive US state law regulating "high-risk" AI systems and algorithmic discrimination</li>
+                        <li><strong>NYC Local Law 144:</strong> Requires bias audits for automated employment decision tools</li>
+                        <li><strong>China's Generative AI Measures & Algorithm Recommendation regulations:</strong> Require security assessments and algorithm registration</li>
+                        <li><strong>Canada's AIDA (Artificial Intelligence and Data Act):</strong> Proposed risk-based framework for "high-impact" systems</li>
+                        <li><strong>Sector-specific rules:</strong> FDA oversight of AI/ML-based medical devices (SaMD), financial services model risk management guidance (e.g., SR 11-7 in the US)</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3>3. Risk Assessment & Management</h3>
+                    <p><strong>Identifying and Mitigating AI Risks</strong></p>
+                    <ul>
+                        <li><strong>Bias and Fairness:</strong> Detecting and preventing discriminatory outcomes</li>
+                        <li><strong>Transparency:</strong> Explainability (XAI) of AI decision-making</li>
+                        <li><strong>Data Security:</strong> Protecting training and operational data</li>
+                        <li><strong>Model Robustness:</strong> Testing against adversarial inputs</li>
+                        <li><strong>Accountability:</strong> Clear responsibility chains for AI decisions</li>
+                    </ul>
+
+                    <p><strong>Types of Bias in AI Systems</strong></p>
+                    <ul>
+                        <li><strong>Historical bias:</strong> Training data reflects past societal inequities (e.g., biased lending history)</li>
+                        <li><strong>Representation bias:</strong> Training data underrepresents certain groups</li>
+                        <li><strong>Measurement bias:</strong> Proxy variables poorly capture the concept intended (e.g., using arrest records as a proxy for crime)</li>
+                        <li><strong>Aggregation bias:</strong> A single model applied uniformly fails to capture differences across subgroups</li>
+                        <li><strong>Evaluation bias:</strong> Benchmark/test data doesn't reflect the deployment population</li>
+                    </ul>
+
+                    <p><strong>Fairness Metrics</strong></p>
+                    <ul>
+                        <li><strong>Demographic parity:</strong> Positive outcome rates are equal across groups</li>
+                        <li><strong>Equalized odds:</strong> True positive and false positive rates are equal across groups</li>
+                        <li><strong>Predictive parity:</strong> Precision is equal across groups</li>
+                        <li><strong>Individual fairness:</strong> Similar individuals receive similar outcomes</li>
+                        <li>Note: these metrics can mathematically conflict — satisfying one often means violating another, so tradeoffs must be documented and justified</li>
+                    </ul>
+
+                    <p><strong>Algorithmic Impact Assessments (AIA)</strong></p>
+                    <ul>
+                        <li>Structured, documented evaluation of an AI system's potential impact on individuals and society before deployment</li>
+                        <li>Typically covers: purpose, affected populations, data sources, risk of harm, mitigation measures, and monitoring plan</li>
+                        <li>Increasingly required by law (e.g., Canada's Directive on Automated Decision-Making, various US state laws)</li>
+                    </ul>
+
+                    <p><strong>Security Risks Specific to AI</strong></p>
+                    <ul>
+                        <li><strong>Data poisoning:</strong> Adversary corrupts training data to manipulate model behavior</li>
+                        <li><strong>Adversarial examples:</strong> Inputs subtly perturbed to cause misclassification</li>
+                        <li><strong>Model inversion:</strong> Attacker reconstructs sensitive training data from model outputs</li>
+                        <li><strong>Membership inference:</strong> Attacker determines whether a specific record was in the training set</li>
+                        <li><strong>Model/IP theft:</strong> Extracting a proprietary model via repeated querying</li>
+                        <li><strong>Prompt injection (for LLMs):</strong> Malicious input manipulates a model into ignoring instructions or leaking data</li>
+                    </ul>
+
+                    <p><strong>Risk Assessment Methodology</strong></p>
+                    <ul>
+                        <li><strong>Likelihood × Severity:</strong> Classic risk-scoring approach adapted for AI harms (individual, group, and societal levels)</li>
+                        <li><strong>Risk tiering:</strong> Categorize systems (e.g., minimal/limited/high/unacceptable, mirroring EU AI Act) to calibrate the level of scrutiny and controls required</li>
+                        <li><strong>Continuous reassessment:</strong> Risk isn't static — model updates, new data, or new use contexts require re-assessment</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3>4. Ethical AI Principles</h3>
+                    <p><strong>Core Ethical Frameworks</strong></p>
+                    <ul>
+                        <li><strong>Fairness:</strong> Ensuring equal treatment across demographic groups</li>
+                        <li><strong>Transparency:</strong> Clear communication about AI capabilities and limitations</li>
+                        <li><strong>Accountability:</strong> Clear ownership and responsibility for AI outcomes</li>
+                        <li><strong>Privacy:</strong> Protecting individual data and avoiding misuse</li>
+                        <li><strong>Human Agency:</strong> Maintaining human control over critical decisions</li>
+                        <li><strong>Sustainability:</strong> Considering environmental and societal impact</li>
+                    </ul>
+
+                    <p><strong>Influential Ethics Frameworks</strong></p>
+                    <ul>
+                        <li><strong>OECD AI Principles (2019):</strong> Inclusive growth, human-centered values, transparency, robustness/safety, accountability — widely referenced baseline for national policy</li>
+                        <li><strong>IEEE Ethically Aligned Design:</strong> Engineering-oriented framework emphasizing human well-being as a success metric, not just performance</li>
+                        <li><strong>Asilomar AI Principles:</strong> Research-community principles covering safety, failure transparency, value alignment, and long-term risk</li>
+                        <li><strong>UNESCO Recommendation on the Ethics of AI:</strong> First global standard-setting instrument on AI ethics, adopted by 190+ member states</li>
+                    </ul>
+
+                    <p><strong>Explainability vs. Interpretability</strong></p>
+                    <ul>
+                        <li><strong>Interpretability:</strong> The model's internal logic is inherently understandable (e.g., a decision tree or linear regression)</li>
+                        <li><strong>Explainability:</strong> A separate technique explains a black-box model's output after the fact (e.g., SHAP, LIME)</li>
+                        <li><strong>Global vs. local explanations:</strong> Global explains overall model behavior; local explains a single prediction</li>
+                    </ul>
+
+                    <p><strong>Tensions and Tradeoffs Between Principles</strong></p>
+                    <ul>
+                        <li><strong>Accuracy vs. fairness:</strong> Debiasing techniques can reduce raw predictive accuracy for the majority group</li>
+                        <li><strong>Transparency vs. IP/security:</strong> Full model disclosure can expose trade secrets or enable adversarial attacks</li>
+                        <li><strong>Privacy vs. fairness auditing:</strong> Measuring bias often requires collecting the very demographic data privacy principles discourage collecting</li>
+                        <li><strong>Personalization vs. autonomy:</strong> Highly optimized recommendation systems can undermine human agency through manipulation</li>
+                    </ul>
+
+                    <p><strong>Human-Centered Design Concepts</strong></p>
+                    <ul>
+                        <li><strong>Human-in-the-loop (HITL):</strong> A person reviews/approves each AI decision before it takes effect</li>
+                        <li><strong>Human-on-the-loop:</strong> A person monitors and can intervene/override, but doesn't approve every decision</li>
+                        <li><strong>Human-out-of-the-loop:</strong> Fully automated, no real-time human oversight — reserved for low-risk, well-validated use cases</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3>5. Organizational AI Governance</h3>
+                    <p><strong>Implementing Governance Structures</strong></p>
+                    <ul>
+                        <li><strong>AI Governance Committees:</strong> Cross-functional oversight bodies</li>
+                        <li><strong>Roles & Responsibilities:</strong> Chief AI Officer, AI Ethics Board, Model Owners</li>
+                        <li><strong>Policies & Procedures:</strong> Standards for development, deployment, and monitoring</li>
+                        <li><strong>Training & Awareness:</strong> Educating staff on responsible AI practices</li>
+                        <li><strong>Documentation:</strong> Model cards, risk assessments, audit trails</li>
+                    </ul>
+
+                    <p><strong>The Three Lines of Defense Model (adapted for AI)</strong></p>
+                    <ul>
+                        <li><strong>First line:</strong> Data scientists and product teams who build and operate models — own day-to-day risk controls</li>
+                        <li><strong>Second line:</strong> Risk, compliance, and AI governance functions that set policy and independently review/challenge first-line work</li>
+                        <li><strong>Third line:</strong> Internal audit — provides independent assurance that governance controls are actually working</li>
+                    </ul>
+
+                    <p><strong>Key Roles in Detail</strong></p>
+                    <ul>
+                        <li><strong>Chief AI Officer (CAIO):</strong> Executive accountable for AI strategy, risk, and value across the organization</li>
+                        <li><strong>AI Ethics Board:</strong> Reviews high-risk or novel use cases, adjudicates escalations, sets ethical policy</li>
+                        <li><strong>Model Owner:</strong> Accountable for a specific model's performance, risk, and lifecycle over time</li>
+                        <li><strong>Model Validator / Independent Reviewer:</strong> Tests and challenges models independently of the build team (separation of duties)</li>
+                        <li><strong>Data Steward:</strong> Owns data quality, lineage, and appropriate use for a given dataset</li>
+                        <li><strong>AI Risk Officer:</strong> Embeds AI-specific risk assessment into the enterprise risk management function</li>
+                    </ul>
+
+                    <p><strong>AI Governance Maturity</strong></p>
+                    <ul>
+                        <li><strong>Ad hoc:</strong> No formal policy; governance depends on individual judgment</li>
+                        <li><strong>Developing:</strong> Policies exist but are inconsistently applied; limited inventory of AI systems</li>
+                        <li><strong>Defined:</strong> Standardized processes, a central AI inventory/registry, and defined roles across the lifecycle</li>
+                        <li><strong>Managed:</strong> Metrics-driven oversight; risk tiering applied consistently; regular audits</li>
+                        <li><strong>Optimized:</strong> Continuous improvement; governance scales with AI adoption without becoming a bottleneck</li>
+                    </ul>
+
+                    <p><strong>The AI System Inventory / Registry</strong></p>
+                    <ul>
+                        <li>Centralized, living catalog of every AI system in use, its risk tier, owner, purpose, and status</li>
+                        <li>Foundational control — you cannot govern what you cannot see; increasingly a regulatory requirement (e.g., EU AI Act database for high-risk systems)</li>
+                    </ul>
+
+                    <p><strong>Vendor & Third-Party AI Governance</strong></p>
+                    <ul>
+                        <li>Procurement due diligence: request model cards, bias audit results, and security attestations from vendors</li>
+                        <li>Contractual controls: right-to-audit clauses, liability allocation, notification obligations for model changes</li>
+                        <li>Deployer obligations often apply even when an organization didn't build the underlying model (e.g., fine-tuned or embedded third-party AI)</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3>6. Model Monitoring & Governance</h3>
+                    <p><strong>Lifecycle Management</strong></p>
+                    <ul>
+                        <li><strong>Continuous Monitoring:</strong> Tracking model performance and drift over time</li>
+                        <li><strong>Audit Trails:</strong> Recording all decisions and model changes</li>
+                        <li><strong>Model Governance Boards:</strong> Review and approval processes</li>
+                        <li><strong>Incident Response:</strong> Protocols for handling model failures or misuse</li>
+                        <li><strong>Versioning & Updates:</strong> Managing model evolution and rollback strategies</li>
+                    </ul>
+
+                    <p><strong>Types of Drift</strong></p>
+                    <ul>
+                        <li><strong>Data drift (covariate shift):</strong> The statistical distribution of input features changes over time</li>
+                        <li><strong>Concept drift:</strong> The relationship between inputs and the target outcome changes (the thing being predicted itself evolves)</li>
+                        <li><strong>Label drift:</strong> The distribution of the target variable itself shifts</li>
+                        <li><strong>Upstream/pipeline drift:</strong> Changes in a feature's source system silently alter its meaning or scale</li>
+                    </ul>
+
+                    <p><strong>Monitoring Metrics</strong></p>
+                    <ul>
+                        <li><strong>Performance metrics:</strong> Accuracy, precision, recall, F1, AUC — tracked over time, not just at launch</li>
+                        <li><strong>Fairness metrics:</strong> Ongoing subgroup performance comparisons, not a one-time check</li>
+                        <li><strong>Operational metrics:</strong> Latency, throughput, uptime, error rates</li>
+                        <li><strong>Population Stability Index (PSI) / KL divergence:</strong> Statistical measures commonly used to quantify drift</li>
+                        <li><strong>Business/outcome metrics:</strong> Whether the model is still delivering the intended real-world value</li>
+                    </ul>
+
+                    <p><strong>MLOps & Governance Integration</strong></p>
+                    <ul>
+                        <li><strong>CI/CD for models:</strong> Automated testing gates (performance, fairness, security) before promotion to production</li>
+                        <li><strong>Champion/challenger testing:</strong> New model versions run alongside the production model before full rollout</li>
+                        <li><strong>Canary/staged rollout:</strong> Gradually expose a new model to a subset of traffic to limit blast radius</li>
+                        <li><strong>Rollback plans:</strong> Predefined criteria and mechanism to revert to a prior model version</li>
+                    </ul>
+
+                    <p><strong>Incident Response for AI</strong></p>
+                    <ul>
+                        <li><strong>Detection:</strong> Automated alerts for drift, fairness violations, or anomalous outputs</li>
+                        <li><strong>Triage & severity classification:</strong> Assess scope of harm (individual vs. systemic)</li>
+                        <li><strong>Containment:</strong> Disable/roll back the model, add human review, or restrict scope</li>
+                        <li><strong>Root cause analysis & remediation:</strong> Fix underlying data, model, or process issue</li>
+                        <li><strong>Disclosure:</strong> Notify affected individuals/regulators where legally required</li>
+                        <li><strong>Post-incident review:</strong> Update governance controls to prevent recurrence</li>
+                    </ul>
+
+                    <p><strong>Model Decommissioning</strong></p>
+                    <ul>
+                        <li>Formal retirement process — an unmonitored legacy model left running is a common source of ungoverned risk ("model sprawl")</li>
+                        <li>Preserve documentation and audit trails post-retirement for legal/regulatory retention requirements</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3>7. AI Governance Tools & Technologies</h3>
+                    <p><strong>Practical Implementation Tools</strong></p>
+                    <ul>
+                        <li><strong>Explainability Tools:</strong> SHAP, LIME, Integrated Gradients</li>
+                        <li><strong>Fairness Testing:</strong> Bias detection and mitigation frameworks</li>
+                        <li><strong>Model Governance Platforms:</strong> MLflow, Kubeflow, DataRobot</li>
+                        <li><strong>Data Management:</strong> Data catalogs, lineage tracking, quality monitoring</li>
+                        <li><strong>Compliance Tools:</strong> Audit logging, policy enforcement automation</li>
+                    </ul>
+
+                    <p><strong>Explainability Techniques — How They Work</strong></p>
+                    <ul>
+                        <li><strong>SHAP (SHapley Additive exPlanations):</strong> Game-theory-based method that attributes a prediction's outcome to each input feature's contribution, both locally and globally</li>
+                        <li><strong>LIME (Local Interpretable Model-agnostic Explanations):</strong> Approximates a complex model locally with a simple, interpretable one around a specific prediction</li>
+                        <li><strong>Integrated Gradients:</strong> Attributes a neural network's output to input features by integrating gradients along a path from a baseline input</li>
+                        <li><strong>Counterfactual explanations:</strong> Show the minimal change to an input that would flip the model's decision (e.g., "if income were $2,000 higher, the loan would be approved")</li>
+                    </ul>
+
+                    <p><strong>Fairness & Bias Detection Toolkits</strong></p>
+                    <ul>
+                        <li><strong>IBM AI Fairness 360 (AIF360):</strong> Open-source library of fairness metrics and bias mitigation algorithms</li>
+                        <li><strong>Google What-If Tool / Fairness Indicators:</strong> Visual, no-code exploration of model behavior across slices of data</li>
+                        <li><strong>Microsoft Fairlearn:</strong> Python package for assessing and improving fairness in ML models</li>
+                        <li><strong>Aequitas:</strong> Bias audit toolkit focused on policy and public-sector use cases</li>
+                    </ul>
+
+                    <p><strong>MLOps & Model Governance Platforms</strong></p>
+                    <ul>
+                        <li><strong>MLflow:</strong> Open-source experiment tracking, model registry, and packaging</li>
+                        <li><strong>Kubeflow:</strong> Kubernetes-native platform for orchestrating ML pipelines</li>
+                        <li><strong>DataRobot / Databricks / SageMaker Model Monitor:</strong> Enterprise platforms with built-in monitoring, governance, and approval workflows</li>
+                        <li><strong>Model registries:</strong> Central source of truth for model versions, lineage, and approval status</li>
+                    </ul>
+
+                    <p><strong>Data Governance Tools</strong></p>
+                    <ul>
+                        <li><strong>Data catalogs</strong> (e.g., Collibra, Alation): Inventory of data assets with metadata and ownership</li>
+                        <li><strong>Lineage tracking:</strong> Traces data from source through transformations to model input, critical for root-cause analysis and audits</li>
+                        <li><strong>Data quality monitoring:</strong> Automated checks for completeness, consistency, and drift in input data</li>
+                    </ul>
+
+                    <p><strong>Compliance & Documentation Artifacts</strong></p>
+                    <ul>
+                        <li><strong>Model cards:</strong> Standardized documentation of a model's intended use, performance, limitations, and ethical considerations (popularized by Google's Model Card framework)</li>
+                        <li><strong>Datasheets for datasets:</strong> Documentation of dataset provenance, composition, and collection process</li>
+                        <li><strong>Audit logging:</strong> Immutable records of model decisions, inputs, and version used — supports investigations and regulatory audits</li>
+                        <li><strong>Policy-as-code:</strong> Automated enforcement of governance rules (e.g., blocking deployment of a model that fails a bias threshold) directly in the CI/CD pipeline</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3>8. Exam Tips & Quick-Reference Glossary</h3>
+                    <p><strong>High-Yield Numbers & Facts</strong></p>
+                    <ul>
+                        <li>NIST AI RMF has <strong>4 core functions</strong>: Govern, Map, Measure, Manage</li>
+                        <li>EU AI Act defines <strong>4 risk tiers</strong>: Unacceptable, High, Limited, Minimal (plus a separate track for General-Purpose AI)</li>
+                        <li>ISO/IEC <strong>42001</strong> = certifiable AI Management System standard (like 27001, but for AI)</li>
+                        <li>ISO/IEC <strong>23894</strong> = AI risk management guidance</li>
+                        <li>GDPR <strong>Article 22</strong> = right not to be subject to solely automated decisions with legal/significant effects</li>
+                        <li>OECD AI Principles were adopted by <strong>40+ countries</strong> and underpin the G20 AI principles</li>
+                        <li>NYC <strong>Local Law 144</strong> = mandatory bias audits for automated employment decision tools</li>
+                    </ul>
+
+                    <p><strong>Acronym Cheat Sheet</strong></p>
+                    <ul>
+                        <li><strong>XAI</strong> — Explainable AI</li>
+                        <li><strong>SHAP</strong> — SHapley Additive exPlanations</li>
+                        <li><strong>LIME</strong> — Local Interpretable Model-agnostic Explanations</li>
+                        <li><strong>AIMS</strong> — AI Management System (ISO/IEC 42001)</li>
+                        <li><strong>AIA</strong> — Algorithmic Impact Assessment</li>
+                        <li><strong>DPIA</strong> — Data Protection Impact Assessment</li>
+                        <li><strong>RMF</strong> — Risk Management Framework</li>
+                        <li><strong>GPAI</strong> — General-Purpose AI</li>
+                        <li><strong>HITL / HOTL</strong> — Human-in-the-Loop / Human-on-the-Loop</li>
+                        <li><strong>MLOps</strong> — Machine Learning Operations</li>
+                        <li><strong>PSI</strong> — Population Stability Index (drift metric)</li>
+                        <li><strong>SaMD</strong> — Software as a Medical Device</li>
+                        <li><strong>AIDA</strong> — (Canada) Artificial Intelligence and Data Act</li>
+                    </ul>
+
+                    <p><strong>Commonly Confused Pairs</strong></p>
+                    <ul>
+                        <li><strong>Bias vs. Fairness:</strong> Bias is a measurable statistical property (a skew); fairness is the normative judgment about whether that skew is acceptable</li>
+                        <li><strong>Interpretability vs. Explainability:</strong> Interpretability is built-in transparency; explainability is a post-hoc technique applied to a black box</li>
+                        <li><strong>Data drift vs. Concept drift:</strong> Data drift = inputs change; concept drift = the input-output relationship itself changes</li>
+                        <li><strong>Provider vs. Deployer</strong> (EU AI Act): Provider builds/places the system on the market; deployer uses it under their own authority — obligations differ</li>
+                        <li><strong>Governance vs. Compliance:</strong> Compliance is meeting a specific external rule; governance is the broader internal system that produces compliance (and more) consistently</li>
+                    </ul>
+
+                    <p><strong>Study Strategy</strong></p>
+                    <ul>
+                        <li>Focus on <em>why</em> a control exists (the harm it prevents), not just its name — exam questions often test application, not recall</li>
+                        <li>Map each regulation to its risk-based structure — most modern AI laws (EU AI Act, Colorado AI Act, Canada's AIDA) share a tiered, risk-based logic</li>
+                        <li>Practice distinguishing overlapping roles (Model Owner vs. Model Validator vs. Data Steward) — these are frequently tested</li>
+                        <li>Review the fairness-metric tradeoffs carefully — questions often present a scenario where two fairness definitions conflict</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- QUIZ TAB -->
+            <div id="quiz" class="tab-content">
+                <div class="progress-section">
+                    <h3>Quiz Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="quizProgressText">0/30 questions answered</div>
+                </div>
+
+                <div id="quizContainer" class="quiz-container"></div>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="submitQuiz()">Submit Quiz</button>
+                    <button class="btn-secondary" onclick="resetQuiz()">Reset Quiz</button>
+                </div>
+                <div id="quizScore" class="score-display hidden"></div>
+            </div>
+
+            <!-- PROGRESS TAB -->
+            <div id="progress" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Your Learning Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Study Modules Completed</h4>
+                        <div class="number" id="modulesCompleted">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Quiz Attempts</h4>
+                        <div class="number" id="quizAttempts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Average Score</h4>
+                        <div class="number" id="averageScore">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Best Score</h4>
+                        <div class="number" id="bestScore">0%</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 20px; color: #667eea;">Quiz History</h3>
+                    <div id="quizHistory"></div>
+                    <button class="btn-secondary" onclick="clearProgress()" style="margin-top: 20px;">Clear All Progress</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data
+        const quizData = [
+            {
+                question: "What does the EU AI Act classify AI systems by?",
+                options: [
+                    "Processing speed",
+                    "Risk levels",
+                    "Company size",
+                    "Development cost"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which principle emphasizes clear communication about AI capabilities and limitations?",
+                options: [
+                    "Fairness",
+                    "Sustainability",
+                    "Transparency",
+                    "Privacy"
+                ],
+                correct: 2
+            },
+            {
+                question: "What is model drift in the context of AI governance?",
+                options: [
+                    "When a model moves to a new server",
+                    "When model performance degrades over time due to changing data",
+                    "When a model is updated manually",
+                    "When a model loses internet connectivity"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which of the following is NOT a core component of AI governance?",
+                options: [
+                    "Risk assessment",
+                    "Ethical frameworks",
+                    "Model monitoring",
+                    "Marketing strategies"
+                ],
+                correct: 3
+            },
+            {
+                question: "What is explainability (XAI) primarily concerned with?",
+                options: [
+                    "Making AI systems faster",
+                    "Reducing development costs",
+                    "Making AI decision-making understandable to humans",
+                    "Increasing model accuracy"
+                ],
+                correct: 2
+            },
+            {
+                question: "Which regulation specifically addresses data privacy and algorithmic transparency?",
+                options: [
+                    "CCPA",
+                    "GDPR",
+                    "HIPAA",
+                    "SOX"
+                ],
+                correct: 1
+            },
+            {
+                question: "What role is responsible for cross-functional AI oversight?",
+                options: [
+                    "Chief Technology Officer",
+                    "Chief AI Officer",
+                    "Lead Developer",
+                    "Product Manager"
+                ],
+                correct: 1
+            },
+            {
+                question: "Bias detection in AI systems is primarily related to which principle?",
+                options: [
+                    "Speed",
+                    "Fairness",
+                    "Cost-efficiency",
+                    "Scalability"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which tool is commonly used for model governance and monitoring?",
+                options: [
+                    "Microsoft Word",
+                    "MLflow",
+                    "Adobe Photoshop",
+                    "Slack"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the primary purpose of an AI Governance Committee?",
+                options: [
+                    "To approve marketing campaigns",
+                    "To provide cross-functional oversight of AI systems",
+                    "To manage IT infrastructure",
+                    "To handle customer support"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which regulation framework takes a risk-based approach to AI regulation?",
+                options: [
+                    "GDPR",
+                    "EU AI Act",
+                    "CCPA",
+                    "HIPAA"
+                ],
+                correct: 1
+            },
+            {
+                question: "What should be maintained for all AI decisions according to governance best practices?",
+                options: [
+                    "Social media engagement",
+                    "Audit trails",
+                    "Stock prices",
+                    "Customer satisfaction scores"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which principle emphasizes maintaining human control over critical decisions?",
+                options: [
+                    "Automation",
+                    "Efficiency",
+                    "Human Agency",
+                    "Scalability"
+                ],
+                correct: 2
+            },
+            {
+                question: "What is a 'model card' in the context of AI governance?",
+                options: [
+                    "A credit card for model development",
+                    "Documentation of model performance, limitations, and ethical considerations",
+                    "A physical card used to access servers",
+                    "A marketing document for customers"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which of the following is a key responsibility of model owners?",
+                options: [
+                    "Marketing the product",
+                    "Managing model performance and addressing issues",
+                    "Setting company salaries",
+                    "Hiring new employees"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which NIST AI RMF function focuses on cultivating a risk-aware organizational culture?",
+                options: [
+                    "Map",
+                    "Measure",
+                    "Govern",
+                    "Manage"
+                ],
+                correct: 2
+            },
+            {
+                question: "Which ISO/IEC standard is the certifiable AI Management System (AIMS) standard?",
+                options: [
+                    "ISO/IEC 27001",
+                    "ISO/IEC 42001",
+                    "ISO/IEC 9001",
+                    "ISO/IEC 23053"
+                ],
+                correct: 1
+            },
+            {
+                question: "In a data poisoning attack, what does the adversary do?",
+                options: [
+                    "Steals the trained model",
+                    "Corrupts the training data to manipulate model behavior",
+                    "Overloads the server with requests",
+                    "Deletes the model's logs"
+                ],
+                correct: 1
+            },
+            {
+                question: "A membership inference attack allows an adversary to determine what?",
+                options: [
+                    "The model's source code",
+                    "Whether a specific record was part of the training set",
+                    "The model's hosting provider",
+                    "The company's revenue"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which fairness metric requires equal true positive and false positive rates across demographic groups?",
+                options: [
+                    "Demographic parity",
+                    "Predictive parity",
+                    "Equalized odds",
+                    "Individual fairness"
+                ],
+                correct: 2
+            },
+            {
+                question: "What best describes concept drift?",
+                options: [
+                    "The input data's distribution changes over time",
+                    "The relationship between inputs and the target outcome changes over time",
+                    "The model is moved to a new data center",
+                    "The training data is deleted"
+                ],
+                correct: 1
+            },
+            {
+                question: "What distinguishes 'human-on-the-loop' from 'human-in-the-loop' oversight?",
+                options: [
+                    "They are the same thing",
+                    "Human-on-the-loop requires approval of every decision; human-in-the-loop does not",
+                    "Human-on-the-loop monitors and can intervene but doesn't approve every decision, while human-in-the-loop approves each decision",
+                    "Human-on-the-loop means no human oversight at all"
+                ],
+                correct: 2
+            },
+            {
+                question: "What does SHAP (SHapley Additive exPlanations) use to attribute a prediction to input features?",
+                options: [
+                    "Random sampling",
+                    "Game-theory-based Shapley values",
+                    "Manual expert review",
+                    "A separate neural network"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is a counterfactual explanation?",
+                options: [
+                    "A historical record of past model versions",
+                    "The minimal change to an input that would flip the model's decision",
+                    "A legal disclaimer about AI limitations",
+                    "A backup of the training dataset"
+                ],
+                correct: 1
+            },
+            {
+                question: "In the Three Lines of Defense model, which line owns day-to-day risk controls when building and operating models?",
+                options: [
+                    "First line",
+                    "Second line",
+                    "Third line",
+                    "Internal audit"
+                ],
+                correct: 0
+            },
+            {
+                question: "What is the primary purpose of an Algorithmic Impact Assessment (AIA)?",
+                options: [
+                    "To calculate cloud computing costs",
+                    "To structure a documented evaluation of an AI system's potential impact before deployment",
+                    "To measure model inference speed",
+                    "To design the user interface"
+                ],
+                correct: 1
+            },
+            {
+                question: "Under the EU AI Act, chatbots and deepfakes typically fall under which risk tier, requiring disclosure that AI is being used?",
+                options: [
+                    "Unacceptable risk",
+                    "High risk",
+                    "Limited risk",
+                    "Minimal risk"
+                ],
+                correct: 2
+            },
+            {
+                question: "What does GDPR Article 22 grant individuals?",
+                options: [
+                    "The right to free AI services",
+                    "The right not to be subject to a decision based solely on automated processing with legal or similarly significant effects",
+                    "The right to sell their personal data",
+                    "The right to unlimited data storage"
+                ],
+                correct: 1
+            },
+            {
+                question: "NYC Local Law 144 specifically requires what for automated employment decision tools?",
+                options: [
+                    "Annual bias audits",
+                    "Free access for job seekers",
+                    "Government ownership of the algorithm",
+                    "Elimination of all automated hiring tools"
+                ],
+                correct: 0
+            },
+            {
+                question: "What is 'model sprawl' a symptom of?",
+                options: [
+                    "Too much documentation",
+                    "Unmonitored, undecommissioned legacy models left running ungoverned",
+                    "Too many data scientists on a team",
+                    "Excessive model accuracy"
+                ],
+                correct: 1
+            }
+        ];
+
+        let userAnswers = {};
+        let quizAttempts = [];
+
+        // Initialize
+        function initializeQuiz() {
+            loadProgress();
+            renderQuiz();
+            updateStudyProgress();
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            
+            quizData.forEach((q, index) => {
+                const quizItem = document.createElement('div');
+                quizItem.className = 'quiz-item';
+                
+                let optionsHtml = '';
+                q.options.forEach((option, optIndex) => {
+                    optionsHtml += `
+                        <div class="quiz-option">
+                            <label>
+                                <input type="radio" name="q${index}" value="${optIndex}" onchange="userAnswers[${index}] = ${optIndex}">
+                                ${option}
+                            </label>
+                        </div>
+                    `;
+                });
+
+                quizItem.innerHTML = `
+                    <div class="quiz-question">Question ${index + 1}: ${q.question}</div>
+                    <div class="quiz-options">${optionsHtml}</div>
+                `;
+                container.appendChild(quizItem);
+            });
+        }
+
+        function submitQuiz() {
+            const scoreSection = document.getElementById('quizScore');
+            let correct = 0;
+            const answeredQuestions = Object.keys(userAnswers).length;
+
+            if (answeredQuestions === 0) {
+                alert('Please answer at least one question before submitting!');
+                return;
+            }
+
+            // Show correct answers and count correct
+            quizData.forEach((q, index) => {
+                if (userAnswers[index] === q.correct) {
+                    correct++;
+                }
+
+                const radio = document.querySelector(`input[name="q${index}"]`);
+                if (radio) {
+                    const option = radio.closest('.quiz-option');
+                    if (userAnswers[index] !== undefined) {
+                        if (userAnswers[index] === q.correct) {
+                            option.classList.add('correct');
+                        } else {
+                            option.classList.add('incorrect');
+                        }
+                    }
+                }
+            });
+
+            const percentage = Math.round((correct / answeredQuestions) * 100);
+            
+            scoreSection.innerHTML = `
+                <h2>Quiz Completed!</h2>
+                <p>You answered ${answeredQuestions} out of ${quizData.length} questions correctly.</p>
+                <div style="font-size: 3em; margin: 20px 0;">${percentage}%</div>
+                <p>Score: ${correct}/${answeredQuestions}</p>
+            `;
+            scoreSection.classList.remove('hidden');
+            document.querySelector('#quiz .button-group').style.display = 'none';
+
+            // Save attempt
+            quizAttempts.push({
+                date: new Date().toLocaleString(),
+                score: percentage,
+                answered: answeredQuestions,
+                total: quizData.length
+            });
+            saveProgress();
+            updateProgressTab();
+
+            // Update quiz progress
+            const progressPercent = (answeredQuestions / quizData.length) * 100;
+            document.getElementById('quizProgress').style.width = progressPercent + '%';
+            document.getElementById('quizProgressText').textContent = `${answeredQuestions}/${quizData.length} questions answered`;
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            document.getElementById('quizScore').classList.add('hidden');
+            document.querySelector('#quiz .button-group').style.display = 'flex';
+            renderQuiz();
+            document.getElementById('quizProgress').style.width = '0%';
+            document.getElementById('quizProgressText').textContent = '0/30 questions answered';
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'progress') {
+                updateProgressTab();
+            }
+        }
+
+        function updateProgressTab() {
+            const completed = localStorage.getItem('modulesCompleted') || 0;
+            const attempts = quizAttempts.length;
+            
+            let avgScore = 0;
+            let bestScore = 0;
+            
+            if (attempts > 0) {
+                const totalScore = quizAttempts.reduce((sum, attempt) => sum + attempt.score, 0);
+                avgScore = Math.round(totalScore / attempts);
+                bestScore = Math.max(...quizAttempts.map(a => a.score));
+            }
+
+            document.getElementById('modulesCompleted').textContent = completed;
+            document.getElementById('quizAttempts').textContent = attempts;
+            document.getElementById('averageScore').textContent = avgScore + '%';
+            document.getElementById('bestScore').textContent = bestScore + '%';
+
+            // Show quiz history
+            const historyDiv = document.getElementById('quizHistory');
+            if (attempts === 0) {
+                historyDiv.innerHTML = '<p style="color: #999;">No quiz attempts yet. Start with the Quiz tab!</p>';
+            } else {
+                historyDiv.innerHTML = quizAttempts.map((attempt, idx) => `
+                    <div style="background: #f9f9f9; padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid #667eea;">
+                        <strong>Attempt ${idx + 1}</strong> - ${attempt.date}<br>
+                        Score: ${attempt.score}% (${attempt.answered}/${attempt.total} questions)
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateStudyProgress() {
+            // Count completed modules (for demo, we'll use localStorage)
+            const completed = localStorage.getItem('modulesCompleted') || 0;
+            const totalModules = 8;
+            const percentage = (completed / totalModules) * 100;
+            
+            document.getElementById('studyProgress').style.width = percentage + '%';
+            document.getElementById('studyProgressText').textContent = `${completed}/${totalModules} modules completed`;
+        }
+
+        function saveProgress() {
+            localStorage.setItem('quizAttempts', JSON.stringify(quizAttempts));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('quizAttempts');
+            if (saved) {
+                quizAttempts = JSON.parse(saved);
+            }
+        }
+
+        function clearProgress() {
+            if (confirm('Are you sure you want to clear all progress? This cannot be undone.')) {
+                localStorage.clear();
+                quizAttempts = [];
+                userAnswers = {};
+                resetQuiz();
+                updateStudyProgress();
+                updateProgressTab();
+                alert('Progress cleared!');
+            }
+        }
+
+        // Start app
+        window.addEventListener('load', initializeQuiz);
+    </script>
+</body>
+</html>
