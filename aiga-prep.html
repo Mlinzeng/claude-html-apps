@@ -30,11 +30,15 @@
         }
 
         .header {
-            background: #1a56db;
+            background:
+                radial-gradient(circle at 1.5px 1.5px, rgba(255, 255, 255, 0.14) 1.5px, transparent 0),
+                linear-gradient(135deg, #2563eb 0%, #12409e 100%);
+            background-size: 22px 22px, 100% 100%;
             color: white;
             padding: 34px 32px;
             text-align: center;
             border-bottom: 4px solid #f59e0b;
+            position: relative;
         }
 
         .header h1 {
