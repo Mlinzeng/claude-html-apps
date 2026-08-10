@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -28,7 +28,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
             color: white;
             padding: 30px;
             text-align: center;
@@ -70,8 +70,8 @@
         }
 
         .nav-tabs button.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
+            color: #1e40af;
+            border-bottom-color: #1e40af;
             background: white;
         }
 
@@ -111,7 +111,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #1e40af, #1e3a8a);
             transition: width 0.3s ease;
         }
 
@@ -130,7 +130,7 @@
         }
 
         .module h3 {
-            color: #667eea;
+            color: #1e40af;
             margin-bottom: 10px;
             font-size: 1.3em;
         }
@@ -186,7 +186,7 @@
         }
 
         .quiz-option:hover {
-            border-color: #667eea;
+            border-color: #1e40af;
             background: #f0f4ff;
         }
 
@@ -248,12 +248,12 @@
         }
 
         .btn-primary {
-            background: #667eea;
+            background: #1e40af;
             color: white;
         }
 
         .btn-primary:hover {
-            background: #5568d3;
+            background: #1e3a8a;
         }
 
         .btn-success {
@@ -283,7 +283,7 @@
         }
 
         .score-display h2 {
-            color: #667eea;
+            color: #1e40af;
             font-size: 2em;
             margin-bottom: 10px;
         }
@@ -301,7 +301,7 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
             color: white;
             padding: 20px;
             border-radius: 8px;
@@ -799,7 +799,7 @@
                 </div>
 
                 <div style="margin-top: 40px;">
-                    <h3 style="margin-bottom: 20px; color: #667eea;">Quiz History</h3>
+                    <h3 style="margin-bottom: 20px; color: #1e40af;">Quiz History</h3>
                     <div id="quizHistory"></div>
                     <button class="btn-secondary" onclick="clearProgress()" style="margin-top: 20px;">Clear All Progress</button>
                 </div>
@@ -1257,7 +1257,7 @@
                 historyDiv.innerHTML = '<p style="color: #999;">No quiz attempts yet. Start with the Quiz tab!</p>';
             } else {
                 historyDiv.innerHTML = quizAttempts.map((attempt, idx) => `
-                    <div style="background: #f9f9f9; padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid #667eea;">
+                    <div style="background: #f9f9f9; padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid #1e40af;">
                         <strong>Attempt ${idx + 1}</strong> - ${attempt.date}<br>
                         Score: ${attempt.score}% (${attempt.answered}/${attempt.total} questions)
                     </div>
