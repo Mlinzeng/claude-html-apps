@@ -131,8 +131,28 @@
 
         .module h3 {
             color: #1e40af;
-            margin-bottom: 10px;
             font-size: 1.3em;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .module.expanded h3 {
+            margin-bottom: 10px;
+        }
+
+        .module h3::after {
+            content: '▶';
+            font-size: 0.7em;
+            color: #1e40af;
+            transition: transform 0.2s ease;
+            margin-left: 10px;
+        }
+
+        .module.expanded h3::after {
+            transform: rotate(90deg);
         }
 
         .module p {
@@ -149,6 +169,16 @@
 
         .module ul li {
             margin-bottom: 8px;
+        }
+
+        .module p,
+        .module ul {
+            display: none;
+        }
+
+        .module.expanded p,
+        .module.expanded ul {
+            display: block;
         }
 
         .quiz-container {
@@ -355,7 +385,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>1. AI Governance Fundamentals</h3>
+                    <h3 onclick="toggleModule(this)">1. AI Governance Fundamentals</h3>
                     <p><strong>What is AI Governance?</strong></p>
                     <p>AI Governance is the set of processes, policies, and systems used to ensure that AI systems are developed, deployed, and operated responsibly and ethically.</p>
                     <ul>
@@ -403,7 +433,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>2. Regulatory Landscape</h3>
+                    <h3 onclick="toggleModule(this)">2. Regulatory Landscape</h3>
                     <p><strong>Key Regulations and Standards</strong></p>
                     <ul>
                         <li><strong>EU AI Act:</strong> Classifies AI by risk levels; regulates high-risk applications</li>
@@ -458,7 +488,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>3. Risk Assessment & Management</h3>
+                    <h3 onclick="toggleModule(this)">3. Risk Assessment & Management</h3>
                     <p><strong>Identifying and Mitigating AI Risks</strong></p>
                     <ul>
                         <li><strong>Bias and Fairness:</strong> Detecting and preventing discriminatory outcomes</li>
@@ -512,7 +542,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>4. Ethical AI Principles</h3>
+                    <h3 onclick="toggleModule(this)">4. Ethical AI Principles</h3>
                     <p><strong>Core Ethical Frameworks</strong></p>
                     <ul>
                         <li><strong>Fairness:</strong> Ensuring equal treatment across demographic groups</li>
@@ -555,7 +585,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>5. Organizational AI Governance</h3>
+                    <h3 onclick="toggleModule(this)">5. Organizational AI Governance</h3>
                     <p><strong>Implementing Governance Structures</strong></p>
                     <ul>
                         <li><strong>AI Governance Committees:</strong> Cross-functional oversight bodies</li>
@@ -606,7 +636,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>6. Model Monitoring & Governance</h3>
+                    <h3 onclick="toggleModule(this)">6. Model Monitoring & Governance</h3>
                     <p><strong>Lifecycle Management</strong></p>
                     <ul>
                         <li><strong>Continuous Monitoring:</strong> Tracking model performance and drift over time</li>
@@ -659,7 +689,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>7. AI Governance Tools & Technologies</h3>
+                    <h3 onclick="toggleModule(this)">7. AI Governance Tools & Technologies</h3>
                     <p><strong>Practical Implementation Tools</strong></p>
                     <ul>
                         <li><strong>Explainability Tools:</strong> SHAP, LIME, Integrated Gradients</li>
@@ -710,7 +740,7 @@
                 </div>
 
                 <div class="module">
-                    <h3>8. Exam Tips & Quick-Reference Glossary</h3>
+                    <h3 onclick="toggleModule(this)">8. Exam Tips & Quick-Reference Glossary</h3>
                     <p><strong>High-Yield Numbers & Facts</strong></p>
                     <ul>
                         <li>NIST AI RMF has <strong>4 core functions</strong>: Govern, Map, Measure, Manage</li>
@@ -1120,6 +1150,10 @@
             loadProgress();
             renderQuiz();
             updateStudyProgress();
+        }
+
+        function toggleModule(header) {
+            header.parentElement.classList.toggle('expanded');
         }
 
         function renderQuiz() {
