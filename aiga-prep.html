@@ -429,13 +429,6 @@
         <div class="content">
             <!-- STUDY TAB -->
             <div id="study" class="tab-content active">
-                <div class="progress-section">
-                    <h3>Your Study Progress</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="studyProgress" style="width: 0%"></div>
-                    </div>
-                    <div class="progress-text" id="studyProgressText">0/8 modules completed</div>
-                </div>
 
                 <div class="module">
                     <h3 onclick="toggleModule(this)">1. AI Governance Fundamentals</h3>
@@ -864,10 +857,6 @@
                 <h2 style="margin-bottom: 20px;">Your Learning Stats</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <h4>Study Modules Completed</h4>
-                        <div class="number" id="modulesCompleted">0</div>
-                    </div>
-                    <div class="stat-card">
                         <h4>Quiz Attempts</h4>
                         <div class="number" id="quizAttempts">0</div>
                     </div>
@@ -1202,7 +1191,6 @@
         function initializeQuiz() {
             loadProgress();
             renderQuiz();
-            updateStudyProgress();
         }
 
         function toggleModule(header) {
@@ -1321,7 +1309,6 @@
         }
 
         function updateProgressTab() {
-            const completed = localStorage.getItem('modulesCompleted') || 0;
             const attempts = quizAttempts.length;
             
             let avgScore = 0;
@@ -1333,7 +1320,6 @@
                 bestScore = Math.max(...quizAttempts.map(a => a.score));
             }
 
-            document.getElementById('modulesCompleted').textContent = completed;
             document.getElementById('quizAttempts').textContent = attempts;
             document.getElementById('averageScore').textContent = avgScore + '%';
             document.getElementById('bestScore').textContent = bestScore + '%';
@@ -1350,16 +1336,6 @@
                     </div>
                 `).join('');
             }
-        }
-
-        function updateStudyProgress() {
-            // Count completed modules (for demo, we'll use localStorage)
-            const completed = localStorage.getItem('modulesCompleted') || 0;
-            const totalModules = 8;
-            const percentage = (completed / totalModules) * 100;
-            
-            document.getElementById('studyProgress').style.width = percentage + '%';
-            document.getElementById('studyProgressText').textContent = `${completed}/${totalModules} modules completed`;
         }
 
         function saveProgress() {
@@ -1379,7 +1355,6 @@
                 quizAttempts = [];
                 userAnswers = {};
                 resetQuiz();
-                updateStudyProgress();
                 updateProgressTab();
                 alert('Progress cleared!');
             }
