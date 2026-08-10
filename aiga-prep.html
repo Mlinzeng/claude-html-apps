@@ -267,13 +267,45 @@
         }
 
         .module p,
-        .module ul {
+        .module ul,
+        .module table {
             display: none;
         }
 
         .module.expanded p,
         .module.expanded ul {
             display: block;
+        }
+
+        .module.expanded table {
+            display: table;
+        }
+
+        .module table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0 16px;
+            font-size: 0.92em;
+        }
+
+        .module table th,
+        .module table td {
+            text-align: left;
+            padding: 9px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .module table th {
+            color: #0f1e3d;
+            font-weight: 700;
+            background: #f7f9fc;
+        }
+
+        .module table tr:last-child td {
+            font-weight: 700;
+            color: #0f1e3d;
+            border-bottom: none;
         }
 
         .quiz-container {
@@ -484,6 +516,37 @@
         <div class="content">
             <!-- STUDY TAB -->
             <div id="study" class="tab-content active">
+
+                <div class="module">
+                    <h3 onclick="toggleModule(this)">📋 Exam Format &amp; Time Allocation</h3>
+                    <p><strong>Exam Format</strong></p>
+                    <ul>
+                        <li><strong>100 total questions:</strong> 85 scored + 15 unscored (pretest) questions — unscored items are mixed in, indistinguishable from scored ones, and don't count toward your result, so answer every question with full effort</li>
+                        <li>All questions are <strong>multiple choice</strong> with one correct answer among four options; unanswered questions count as incorrect and there's no extra penalty for a wrong guess</li>
+                        <li>About <strong>30% of questions are tied to case studies</strong> presenting a real-world AI development or deployment scenario — these take longer to read than a straight definitional question</li>
+                        <li><strong>Total time: 3 hours</strong>, including one optional 15-minute break midway through — roughly <strong>165 minutes of actual testing time</strong> for 100 questions</li>
+                        <li>Delivered via Pearson VUE, either at a testing center or through OnVUE remote proctoring</li>
+                        <li><strong>Scoring:</strong> reported on a scaled 100–500 range; 300 is the passing cut score; you receive a section-by-section performance breakdown after completion</li>
+                    </ul>
+                    <p><strong>Suggested Time Budget by Domain</strong></p>
+                    <p>There's no official per-domain timer — this is a self-pacing guide based on each domain's share of the 85 scored questions, spread across the ~165 minutes of testing time (about 99 seconds per question on average).</p>
+                    <table>
+                        <tr><th>Domain</th><th>Scored Questions</th><th>Suggested Time</th></tr>
+                        <tr><td>I — Foundations</td><td>16–20 (~18)</td><td>~35 min</td></tr>
+                        <tr><td>II — Laws, Standards &amp; Frameworks</td><td>19–23 (~21)</td><td>~41 min</td></tr>
+                        <tr><td>III — Governing Development</td><td>21–25 (~23)</td><td>~45 min</td></tr>
+                        <tr><td>IV — Governing Deployment &amp; Use</td><td>21–25 (~23)</td><td>~45 min</td></tr>
+                        <tr><td>Total</td><td>~85 scored + 15 unscored</td><td>~165 min</td></tr>
+                    </table>
+                    <p><strong>Pacing Tips</strong></p>
+                    <ul>
+                        <li>Budget extra time for case-study questions — if the testing platform allows flagging/review, mark a tough one and come back rather than stalling your pace</li>
+                        <li>Since you can't tell scored from unscored questions, don't try to guess which is which — treat every question the same</li>
+                        <li>Since unanswered = incorrect with no guessing penalty, always leave an answer selected before time runs out, even if it's your best guess</li>
+                        <li>The mid-exam break is optional but most candidates take it — plan for a short mental reset around the halfway point rather than pushing straight through</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #94a3b8;">Exam logistics per the AIGP Candidate Handbook (effective 2 Apr 2024); domain structure and weights per the AIGP Body of Knowledge v2.1 (effective 2 Feb 2026). Verify current details on IAPP's site before your test date, since exam programs evolve.</p>
+                </div>
 
                 <div class="domain-header">
                     <h2>Domain I — Foundations of AI Governance</h2>
