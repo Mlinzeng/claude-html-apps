@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -206,6 +206,56 @@
 
         .module ul li {
             margin-bottom: 8px;
+        }
+
+        .domain-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 34px 0 6px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1a56db;
+        }
+
+        .domain-header:first-of-type {
+            margin-top: 0;
+        }
+
+        .domain-header h2 {
+            font-size: 1.3em;
+            color: #0f1e3d;
+            font-weight: 800;
+        }
+
+        .domain-badge {
+            background: #eef2f9;
+            color: #1a56db;
+            font-size: 0.8em;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .domain-intro {
+            color: #5b6b82;
+            font-size: 0.92em;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .quiz-domain-tag {
+            display: inline-block;
+            background: #eef2f9;
+            color: #1a56db;
+            font-size: 0.72em;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 10px;
         }
 
         .module ul li strong {
@@ -418,6 +468,7 @@
         <div class="header">
             <h1>🎓 AIGA Prep</h1>
             <p>AI Governance Certificate - Study & Practice</p>
+            <p style="font-size: 0.8em; opacity: 0.75; margin-top: 6px;">Organized around the IAPP AIGP Body of Knowledge v2.1 (effective 2 Feb 2026) domain structure — independent study aid, not affiliated with or endorsed by IAPP.</p>
         </div>
 
         <div class="nav-tabs">
@@ -430,406 +481,282 @@
             <!-- STUDY TAB -->
             <div id="study" class="tab-content active">
 
+                <div class="domain-header">
+                    <h2>Domain I — Foundations of AI Governance</h2>
+                    <span class="domain-badge">16–20 questions (~20% of exam)</span>
+                </div>
+                <p class="domain-intro">What AI governance is, and the principles and building blocks used to construct a governance program — applicable regardless of industry, sector or organization size.</p>
+
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">1. AI Governance Fundamentals</h3>
-                    <p><strong>What is AI Governance?</strong></p>
-                    <p>AI Governance is the set of processes, policies, and systems used to ensure that AI systems are developed, deployed, and operated responsibly and ethically.</p>
+                    <h3 onclick="toggleModule(this)">I.A — What AI Is, and Why It Needs Governance</h3>
+                    <p><strong>Defining AI</strong></p>
                     <ul>
-                        <li>Encompasses risk management, compliance, and ethical frameworks</li>
-                        <li>Involves multiple stakeholders: businesses, regulators, technologists, and society</li>
-                        <li>Addresses transparency, accountability, and fairness</li>
-                        <li>Balances innovation with risk mitigation</li>
+                        <li>AI is generally defined as a machine-based system that, for a given set of objectives, generates outputs such as predictions, recommendations, content or decisions influencing real or virtual environments</li>
+                        <li>Key subtypes to distinguish: rule-based/expert systems vs. machine learning; narrow AI vs. general AI; predictive/classic ML vs. generative AI; single-modal vs. multimodal; and increasingly, <strong>agentic AI</strong> — systems that can plan and take multi-step actions toward a goal with reduced human intervention</li>
                     </ul>
-
-                    <p><strong>Governance vs. Ethics vs. Risk Management</strong></p>
+                    <p><strong>Risks and Harms of AI</strong></p>
                     <ul>
-                        <li><strong>AI Ethics:</strong> The normative question of what an AI system <em>should</em> do — values like fairness, dignity, and non-maleficence</li>
-                        <li><strong>AI Risk Management:</strong> The operational discipline of identifying, measuring, and mitigating harms across the AI lifecycle</li>
-                        <li><strong>AI Governance:</strong> The overarching structure — policies, roles, controls, and accountability mechanisms — that operationalizes ethics and risk management into enforceable practice</li>
+                        <li><strong>Misalignment:</strong> the system optimizes for a proxy objective that diverges from the actual intended goal</li>
+                        <li><strong>Ethics and bias risk:</strong> outputs that discriminate or entrench unfairness against individuals or groups</li>
+                        <li><strong>Complexity and scalability risk:</strong> a flaw that would be minor in one instance becomes systemic once a model is deployed at scale across millions of decisions</li>
+                        <li>Harms can land on individuals (denied opportunity), groups (disparate impact), organizations (legal/reputational liability) and society (erosion of trust, labor displacement, information integrity)</li>
                     </ul>
-
-                    <p><strong>Why Governance Matters</strong></p>
+                    <p><strong>What Makes AI Uniquely Hard to Govern</strong></p>
                     <ul>
-                        <li><strong>Trust:</strong> Users, customers, and regulators need assurance that AI decisions are sound and contestable</li>
-                        <li><strong>Legal exposure:</strong> Ungoverned AI creates liability under anti-discrimination, consumer protection, and data protection law</li>
-                        <li><strong>Operational resilience:</strong> Governance catches model failures (drift, bias, security gaps) before they cause harm at scale</li>
-                        <li><strong>Competitive advantage:</strong> Mature governance enables faster, safer scaling of AI rather than slowing it down</li>
+                        <li><strong>Complexity:</strong> many interacting components (data, model, infrastructure, human processes) that are each independently hard to fully specify</li>
+                        <li><strong>Opacity:</strong> many models (especially deep learning) are effectively "black boxes" whose internal reasoning isn't directly inspectable</li>
+                        <li><strong>Autonomy:</strong> some systems act with limited human review, especially agentic systems that chain decisions together</li>
+                        <li><strong>Speed and scale:</strong> AI can make or influence far more decisions, far faster, than manual human processes — errors propagate before they're caught</li>
+                        <li><strong>Potential for harm or misuse:</strong> dual-use risk — capabilities intended for benign purposes can be repurposed maliciously</li>
+                        <li><strong>Data dependency:</strong> system behavior is a function of training data, so data quality/representativeness problems become model problems</li>
+                        <li><strong>Probabilistic vs. deterministic outputs:</strong> unlike traditional software, the same AI input can produce different outputs, complicating testing, validation and reproducibility</li>
                     </ul>
-
-                    <p><strong>The AI Lifecycle (governance touches every stage)</strong></p>
+                    <p><strong>Common Principles of Responsible AI</strong></p>
                     <ul>
-                        <li><strong>Problem definition & scoping:</strong> Determine if AI is appropriate; define intended use and out-of-scope uses</li>
-                        <li><strong>Data collection & preparation:</strong> Sourcing, labeling, consent, representativeness</li>
-                        <li><strong>Model development & training:</strong> Algorithm selection, hyperparameter tuning, validation</li>
-                        <li><strong>Testing & validation:</strong> Performance, fairness, robustness, and security testing before release</li>
-                        <li><strong>Deployment:</strong> Release gating, human-in-the-loop design, rollback plans</li>
-                        <li><strong>Monitoring & maintenance:</strong> Drift detection, incident response, periodic re-validation</li>
-                        <li><strong>Decommissioning:</strong> Retiring models safely, preserving audit records</li>
-                    </ul>
-
-                    <p><strong>Key Terminology</strong></p>
-                    <ul>
-                        <li><strong>Model:</strong> The trained artifact that maps inputs to outputs</li>
-                        <li><strong>Training data:</strong> Data used to fit model parameters; distinct from validation/test data</li>
-                        <li><strong>Inference:</strong> The act of running a trained model on new input to produce a prediction</li>
-                        <li><strong>Ground truth:</strong> The verified, correct label or outcome used to evaluate model accuracy</li>
-                        <li><strong>Foundation model / general-purpose AI:</strong> A large model trained on broad data and adaptable to many downstream tasks (e.g., LLMs) — subject to distinct regulatory treatment (e.g., under the EU AI Act)</li>
-                        <li><strong>Deployer vs. Provider:</strong> The provider builds/places an AI system on the market; the deployer uses it under its own authority — governance obligations differ between the two</li>
+                        <li><strong>Fairness:</strong> avoiding unjust discrimination in outcomes and treatment</li>
+                        <li><strong>Safety and reliability:</strong> the system performs consistently as intended, and fails safely when it doesn't</li>
+                        <li><strong>Privacy and security:</strong> protecting personal data and defending against adversarial manipulation</li>
+                        <li><strong>Transparency and explainability:</strong> stakeholders can understand that AI is in use and how/why it reached a given output</li>
+                        <li><strong>Accountability:</strong> a clear, traceable chain of responsibility for AI decisions and outcomes</li>
+                        <li><strong>Human-centricity:</strong> AI serves human well-being and preserves meaningful human agency over consequential decisions</li>
                     </ul>
                 </div>
 
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">2. Regulatory Landscape</h3>
-                    <p><strong>Key Regulations and Standards</strong></p>
+                    <h3 onclick="toggleModule(this)">I.B — Organizational Roles and Expectations</h3>
+                    <p><strong>Roles and Responsibilities</strong></p>
                     <ul>
-                        <li><strong>EU AI Act:</strong> Classifies AI by risk levels; regulates high-risk applications</li>
-                        <li><strong>GDPR:</strong> Addresses data privacy and algorithmic transparency</li>
-                        <li><strong>Algorithm Auditing:</strong> Requirements for testing and validation</li>
-                        <li><strong>National Standards:</strong> Emerging frameworks in various countries</li>
-                        <li><strong>Industry Standards:</strong> ISO/IEC standards for AI quality and safety</li>
+                        <li>Governance requires clearly assigned ownership at every stage — ambiguity about "whose job this is" is one of the most common root causes of AI governance failure</li>
+                        <li>Typical roles: executive sponsor/Chief AI Officer, AI governance/ethics committee, model owners, data stewards, legal/privacy/compliance, security, and the business unit deploying the system</li>
                     </ul>
-
-                    <p><strong>EU AI Act — Risk Tier Detail</strong></p>
+                    <p><strong>Cross-Functional Collaboration</strong></p>
                     <ul>
-                        <li><strong>Unacceptable risk (banned):</strong> Social scoring by governments, manipulative subliminal techniques, real-time biometric identification in public spaces (with narrow exceptions), untargeted scraping of facial images</li>
-                        <li><strong>High risk:</strong> AI in employment/hiring, credit scoring, education admissions, law enforcement, critical infrastructure, medical devices — requires conformity assessment, risk management system, technical documentation, human oversight, and registration in an EU database</li>
-                        <li><strong>Limited risk:</strong> Chatbots, deepfakes, emotion recognition — subject to transparency obligations (must disclose AI is being used)</li>
-                        <li><strong>Minimal risk:</strong> Spam filters, AI-enabled video games — largely unregulated</li>
-                        <li><strong>General-Purpose AI (GPAI):</strong> Separate obligations for foundation model providers, with extra requirements for models presenting "systemic risk" (based on compute thresholds)</li>
+                        <li>Effective governance pulls in legal, data science, security, product, and the affected business function — no single discipline has full visibility into all AI risks</li>
+                        <li>Diversity of expertise and perspective on a governance body reduces blind spots (e.g., a legal-only review may miss a technical robustness gap, and vice versa)</li>
                     </ul>
-
-                    <p><strong>GDPR & AI</strong></p>
+                    <p><strong>Training and Awareness</strong></p>
                     <ul>
-                        <li><strong>Article 22:</strong> Individuals have the right not to be subject to a decision based solely on automated processing (including profiling) that has legal or similarly significant effects</li>
-                        <li><strong>DPIA (Data Protection Impact Assessment):</strong> Required for high-risk processing, including many AI use cases</li>
-                        <li><strong>Data minimization & purpose limitation:</strong> Constrain how training data can be collected and reused</li>
-                        <li><strong>Right to explanation:</strong> Debated concept; GDPR grants a right to "meaningful information about the logic involved" in automated decisions</li>
+                        <li>All stakeholders — not just technical staff — need role-appropriate training on AI terminology, organizational strategy, and their governance obligations</li>
+                        <li>A trained workforce is both a risk control (fewer inadvertent misuse incidents) and often a legal expectation under emerging AI laws</li>
                     </ul>
-
-                    <p><strong>NIST AI Risk Management Framework (AI RMF)</strong></p>
+                    <p><strong>Right-Sizing Governance</strong></p>
                     <ul>
-                        <li><strong>Govern:</strong> Cultivate a risk-aware culture and organizational structure</li>
-                        <li><strong>Map:</strong> Identify context, intended use, and risks of a specific AI system</li>
-                        <li><strong>Measure:</strong> Analyze, assess, and track risks using quantitative/qualitative methods</li>
-                        <li><strong>Manage:</strong> Prioritize and act on risks, allocate resources, plan responses</li>
+                        <li>Governance approach should scale with company size, AI maturity, industry, the nature of products/services, business objectives, and risk tolerance — a five-person startup and a regulated bank should not run identical governance processes</li>
                     </ul>
-
-                    <p><strong>ISO/IEC Standards</strong></p>
+                    <p><strong>Developers, Providers, Deployers and Users</strong></p>
                     <ul>
-                        <li><strong>ISO/IEC 42001:</strong> First international AI Management System (AIMS) standard — certifiable, analogous to ISO 27001 for security</li>
-                        <li><strong>ISO/IEC 23894:</strong> AI risk management guidance</li>
-                        <li><strong>ISO/IEC 23053:</strong> Framework for AI systems using machine learning</li>
-                        <li><strong>ISO/IEC TR 24028:</strong> Overview of trustworthiness in AI</li>
-                    </ul>
-
-                    <p><strong>Other Notable Frameworks & Laws</strong></p>
-                    <ul>
-                        <li><strong>OECD AI Principles:</strong> International standard for trustworthy AI, adopted by 40+ countries</li>
-                        <li><strong>US Colorado AI Act:</strong> First comprehensive US state law regulating "high-risk" AI systems and algorithmic discrimination</li>
-                        <li><strong>NYC Local Law 144:</strong> Requires bias audits for automated employment decision tools</li>
-                        <li><strong>China's Generative AI Measures & Algorithm Recommendation regulations:</strong> Require security assessments and algorithm registration</li>
-                        <li><strong>Canada's AIDA (Artificial Intelligence and Data Act):</strong> Proposed risk-based framework for "high-impact" systems</li>
-                        <li><strong>Sector-specific rules:</strong> FDA oversight of AI/ML-based medical devices (SaMD), financial services model risk management guidance (e.g., SR 11-7 in the US)</li>
+                        <li><strong>Developer/Provider:</strong> builds and/or places the AI system on the market — carries obligations around design, testing, documentation, and conformity</li>
+                        <li><strong>Deployer:</strong> puts a system into use under its own authority — carries obligations around appropriate use, monitoring, and oversight</li>
+                        <li><strong>User:</strong> the end user interacting with the system's outputs</li>
+                        <li>Many organizations occupy more than one role simultaneously (e.g., fine-tuning a third-party foundation model makes you both a deployer of the base model and, in some frameworks, a provider of the resulting system) — governance obligations shift accordingly</li>
                     </ul>
                 </div>
 
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">3. Risk Assessment & Management</h3>
-                    <p><strong>Identifying and Mitigating AI Risks</strong></p>
+                    <h3 onclick="toggleModule(this)">I.C — Policies and Procedures Across the AI Lifecycle</h3>
+                    <p><strong>Lifecycle-Wide Policy Coverage</strong></p>
                     <ul>
-                        <li><strong>Bias and Fairness:</strong> Detecting and preventing discriminatory outcomes</li>
-                        <li><strong>Transparency:</strong> Explainability (XAI) of AI decision-making</li>
-                        <li><strong>Data Security:</strong> Protecting training and operational data</li>
-                        <li><strong>Model Robustness:</strong> Testing against adversarial inputs</li>
-                        <li><strong>Accountability:</strong> Clear responsibility chains for AI decisions</li>
+                        <li>Governance policy should span every lifecycle stage: use case assessment, risk management, ethics by design, data acquisition and use, model/system development, training and testing, deployment and monitoring, documentation and reporting, and incident management</li>
+                        <li>"Ethics by design" means embedding ethical review at the point of design, not bolting it on after a model is built</li>
                     </ul>
-
-                    <p><strong>Types of Bias in AI Systems</strong></p>
+                    <p><strong>Updating Existing Policies for AI</strong></p>
                     <ul>
-                        <li><strong>Historical bias:</strong> Training data reflects past societal inequities (e.g., biased lending history)</li>
-                        <li><strong>Representation bias:</strong> Training data underrepresents certain groups</li>
-                        <li><strong>Measurement bias:</strong> Proxy variables poorly capture the concept intended (e.g., using arrest records as a proxy for crime)</li>
-                        <li><strong>Aggregation bias:</strong> A single model applied uniformly fails to capture differences across subgroups</li>
-                        <li><strong>Evaluation bias:</strong> Benchmark/test data doesn't reflect the deployment population</li>
+                        <li>AI doesn't only need new policy — it stresses existing policy. Data privacy, security, data governance and intellectual property policies typically need to be reevaluated and updated to explicitly address AI-specific scenarios (e.g., can training data be reused for a new model purpose under the original privacy notice?)</li>
                     </ul>
-
-                    <p><strong>Fairness Metrics</strong></p>
+                    <p><strong>Third-Party and Vendor Risk</strong></p>
                     <ul>
-                        <li><strong>Demographic parity:</strong> Positive outcome rates are equal across groups</li>
-                        <li><strong>Equalized odds:</strong> True positive and false positive rates are equal across groups</li>
-                        <li><strong>Predictive parity:</strong> Precision is equal across groups</li>
-                        <li><strong>Individual fairness:</strong> Similar individuals receive similar outcomes</li>
-                        <li>Note: these metrics can mathematically conflict — satisfying one often means violating another, so tradeoffs must be documented and justified</li>
+                        <li>Procurement, supply chain, HR, and acceptable-use policies need AI-specific updates and assessments — an organization can incur significant liability from a vendor's AI system even without building any AI itself</li>
+                        <li>Contracts should address audit rights, model change notification, liability allocation, and data handling</li>
                     </ul>
+                </div>
 
-                    <p><strong>Algorithmic Impact Assessments (AIA)</strong></p>
-                    <ul>
-                        <li>Structured, documented evaluation of an AI system's potential impact on individuals and society before deployment</li>
-                        <li>Typically covers: purpose, affected populations, data sources, risk of harm, mitigation measures, and monitoring plan</li>
-                        <li>Increasingly required by law (e.g., Canada's Directive on Automated Decision-Making, various US state laws)</li>
-                    </ul>
+                <div class="domain-header">
+                    <h2>Domain II — Laws, Standards and Frameworks</h2>
+                    <span class="domain-badge">19–23 questions (~25% of exam)</span>
+                </div>
+                <p class="domain-intro">How existing (non-AI-specific) laws apply to AI, the main elements of AI-specific laws, and the leading industry standards and frameworks.</p>
 
-                    <p><strong>Security Risks Specific to AI</strong></p>
+                <div class="module">
+                    <h3 onclick="toggleModule(this)">II.A — Existing Data Privacy Laws Applied to AI</h3>
                     <ul>
-                        <li><strong>Data poisoning:</strong> Adversary corrupts training data to manipulate model behavior</li>
-                        <li><strong>Adversarial examples:</strong> Inputs subtly perturbed to cause misclassification</li>
-                        <li><strong>Model inversion:</strong> Attacker reconstructs sensitive training data from model outputs</li>
-                        <li><strong>Membership inference:</strong> Attacker determines whether a specific record was in the training set</li>
-                        <li><strong>Model/IP theft:</strong> Extracting a proprietary model via repeated querying</li>
-                        <li><strong>Prompt injection (for LLMs):</strong> Malicious input manipulates a model into ignoring instructions or leaking data</li>
-                    </ul>
-
-                    <p><strong>Risk Assessment Methodology</strong></p>
-                    <ul>
-                        <li><strong>Likelihood × Severity:</strong> Classic risk-scoring approach adapted for AI harms (individual, group, and societal levels)</li>
-                        <li><strong>Risk tiering:</strong> Categorize systems (e.g., minimal/limited/high/unacceptable, mirroring EU AI Act) to calibrate the level of scrutiny and controls required</li>
-                        <li><strong>Continuous reassessment:</strong> Risk isn't static — model updates, new data, or new use contexts require re-assessment</li>
+                        <li><strong>Transparency, choice, lawful basis, purpose limitation:</strong> AI systems must still be built on a lawful basis for processing personal data, and data collected for one purpose generally can't be silently repurposed to train an unrelated model</li>
+                        <li><strong>Data minimization and privacy by design:</strong> collect only the data needed for the stated AI purpose, and build privacy safeguards into the system from the start rather than retrofitting them</li>
+                        <li><strong>Data controller obligations:</strong> privacy impact assessments, due diligence on third-party processors, cross-border data transfer mechanisms, honoring data subject rights (access, deletion, correction), rules on automated decision-making, incident management, breach notification, and recordkeeping all apply when personal data feeds an AI system</li>
+                        <li><strong>Sensitive/special category data:</strong> biometric data (e.g., face or voice used for identification) typically triggers heightened consent and processing requirements</li>
                     </ul>
                 </div>
 
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">4. Ethical AI Principles</h3>
-                    <p><strong>Core Ethical Frameworks</strong></p>
+                    <h3 onclick="toggleModule(this)">II.B — Other Existing Laws Applied to AI</h3>
                     <ul>
-                        <li><strong>Fairness:</strong> Ensuring equal treatment across demographic groups</li>
-                        <li><strong>Transparency:</strong> Clear communication about AI capabilities and limitations</li>
-                        <li><strong>Accountability:</strong> Clear ownership and responsibility for AI outcomes</li>
-                        <li><strong>Privacy:</strong> Protecting individual data and avoiding misuse</li>
-                        <li><strong>Human Agency:</strong> Maintaining human control over critical decisions</li>
-                        <li><strong>Sustainability:</strong> Considering environmental and societal impact</li>
-                    </ul>
-
-                    <p><strong>Influential Ethics Frameworks</strong></p>
-                    <ul>
-                        <li><strong>OECD AI Principles (2019):</strong> Inclusive growth, human-centered values, transparency, robustness/safety, accountability — widely referenced baseline for national policy</li>
-                        <li><strong>IEEE Ethically Aligned Design:</strong> Engineering-oriented framework emphasizing human well-being as a success metric, not just performance</li>
-                        <li><strong>Asilomar AI Principles:</strong> Research-community principles covering safety, failure transparency, value alignment, and long-term risk</li>
-                        <li><strong>UNESCO Recommendation on the Ethics of AI:</strong> First global standard-setting instrument on AI ethics, adopted by 190+ member states</li>
-                    </ul>
-
-                    <p><strong>Explainability vs. Interpretability</strong></p>
-                    <ul>
-                        <li><strong>Interpretability:</strong> The model's internal logic is inherently understandable (e.g., a decision tree or linear regression)</li>
-                        <li><strong>Explainability:</strong> A separate technique explains a black-box model's output after the fact (e.g., SHAP, LIME)</li>
-                        <li><strong>Global vs. local explanations:</strong> Global explains overall model behavior; local explains a single prediction</li>
-                    </ul>
-
-                    <p><strong>Tensions and Tradeoffs Between Principles</strong></p>
-                    <ul>
-                        <li><strong>Accuracy vs. fairness:</strong> Debiasing techniques can reduce raw predictive accuracy for the majority group</li>
-                        <li><strong>Transparency vs. IP/security:</strong> Full model disclosure can expose trade secrets or enable adversarial attacks</li>
-                        <li><strong>Privacy vs. fairness auditing:</strong> Measuring bias often requires collecting the very demographic data privacy principles discourage collecting</li>
-                        <li><strong>Personalization vs. autonomy:</strong> Highly optimized recommendation systems can undermine human agency through manipulation</li>
-                    </ul>
-
-                    <p><strong>Human-Centered Design Concepts</strong></p>
-                    <ul>
-                        <li><strong>Human-in-the-loop (HITL):</strong> A person reviews/approves each AI decision before it takes effect</li>
-                        <li><strong>Human-on-the-loop:</strong> A person monitors and can intervene/override, but doesn't approve every decision</li>
-                        <li><strong>Human-out-of-the-loop:</strong> Fully automated, no real-time human oversight — reserved for low-risk, well-validated use cases</li>
+                        <li><strong>Intellectual property law:</strong> governs whether copyrighted or proprietary data can lawfully be used to train an AI model, and raises open questions about ownership of AI-generated output</li>
+                        <li><strong>Nondiscrimination law:</strong> long-standing protections in employment, credit, lending, housing, and insurance apply fully to AI-driven decisions in those areas — an algorithm producing a disparate outcome is not a defense against a discrimination claim</li>
+                        <li><strong>Consumer protection law:</strong> prohibitions on unfair and deceptive acts or practices apply to AI-powered marketing, chatbots, and pricing — e.g., a chatbot falsely claiming to be human, or a "dark pattern" AI upsell</li>
+                        <li><strong>Product liability law:</strong> design and manufacturing defect theories can apply to AI systems embedded in products, raising questions about who is liable when a flawed model causes physical or financial harm</li>
                     </ul>
                 </div>
 
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">5. Organizational AI Governance</h3>
-                    <p><strong>Implementing Governance Structures</strong></p>
+                    <h3 onclick="toggleModule(this)">II.C — Main Elements of AI-Specific Laws</h3>
+                    <p><strong>Risk Classification</strong></p>
                     <ul>
-                        <li><strong>AI Governance Committees:</strong> Cross-functional oversight bodies</li>
-                        <li><strong>Roles & Responsibilities:</strong> Chief AI Officer, AI Ethics Board, Model Owners</li>
-                        <li><strong>Policies & Procedures:</strong> Standards for development, deployment, and monitoring</li>
-                        <li><strong>Training & Awareness:</strong> Educating staff on responsible AI practices</li>
-                        <li><strong>Documentation:</strong> Model cards, risk assessments, audit trails</li>
+                        <li>Most AI-specific laws (most prominently the EU AI Act) use a tiered risk classification: <strong>prohibited</strong>, <strong>high</strong>, <strong>limited</strong>, and <strong>minimal</strong> risk — with obligations scaling to the tier</li>
+                        <li>Know representative examples of what falls in each tier (e.g., social scoring = prohibited; hiring/credit systems = high risk; chatbots = limited risk with a disclosure duty; spam filters = minimal risk)</li>
+                        <li>AI law is a global patchwork, not just the EU — e.g., South Korea's AI Basic Law and various U.S. federal/state laws also regulate AI in the private sector, generally following similar risk-based logic</li>
                     </ul>
-
-                    <p><strong>The Three Lines of Defense Model (adapted for AI)</strong></p>
+                    <p><strong>Core Compliance Requirements</strong></p>
                     <ul>
-                        <li><strong>First line:</strong> Data scientists and product teams who build and operate models — own day-to-day risk controls</li>
-                        <li><strong>Second line:</strong> Risk, compliance, and AI governance functions that set policy and independently review/challenge first-line work</li>
-                        <li><strong>Third line:</strong> Internal audit — provides independent assurance that governance controls are actually working</li>
+                        <li><strong>Risk management:</strong> an ongoing, documented process to identify and mitigate risk across the lifecycle, not a one-time checklist</li>
+                        <li><strong>Data governance:</strong> requirements on training/testing/validation data quality, relevance, and representativeness</li>
+                        <li><strong>Technical documentation:</strong> records sufficient for a regulator or auditor to understand how the system works and was validated</li>
+                        <li><strong>Conformity/impact assessments:</strong> formal evaluations (sometimes third-party) confirming a system meets applicable requirements before or during deployment</li>
+                        <li><strong>Recordkeeping:</strong> retained logs and evidence supporting ongoing compliance</li>
+                        <li><strong>Human oversight:</strong> a meaningful (not token) ability for a person to understand, intervene in, or override the system</li>
+                        <li><strong>Transparency and notification:</strong> disclosing that AI is in use and providing understandable information about it to affected people</li>
+                        <li><strong>Quality management:</strong> an internal system ensuring consistent compliance over time, not just at launch</li>
                     </ul>
-
-                    <p><strong>Key Roles in Detail</strong></p>
+                    <p><strong>General-Purpose AI (GPAI)</strong></p>
                     <ul>
-                        <li><strong>Chief AI Officer (CAIO):</strong> Executive accountable for AI strategy, risk, and value across the organization</li>
-                        <li><strong>AI Ethics Board:</strong> Reviews high-risk or novel use cases, adjudicates escalations, sets ethical policy</li>
-                        <li><strong>Model Owner:</strong> Accountable for a specific model's performance, risk, and lifecycle over time</li>
-                        <li><strong>Model Validator / Independent Reviewer:</strong> Tests and challenges models independently of the build team (separation of duties)</li>
-                        <li><strong>Data Steward:</strong> Owns data quality, lineage, and appropriate use for a given dataset</li>
-                        <li><strong>AI Risk Officer:</strong> Embeds AI-specific risk assessment into the enterprise risk management function</li>
+                        <li>Foundation/general-purpose models (e.g., large language models) usually carry distinct obligations from narrow, task-specific "high-risk" systems, often including extra scrutiny for models presenting systemic risk (frequently tied to compute or capability thresholds)</li>
                     </ul>
-
-                    <p><strong>AI Governance Maturity</strong></p>
+                    <p><strong>Enforcement and Organizational Context</strong></p>
                     <ul>
-                        <li><strong>Ad hoc:</strong> No formal policy; governance depends on individual judgment</li>
-                        <li><strong>Developing:</strong> Policies exist but are inconsistently applied; limited inventory of AI systems</li>
-                        <li><strong>Defined:</strong> Standardized processes, a central AI inventory/registry, and defined roles across the lifecycle</li>
-                        <li><strong>Managed:</strong> Metrics-driven oversight; risk tiering applied consistently; regular audits</li>
-                        <li><strong>Optimized:</strong> Continuous improvement; governance scales with AI adoption without becoming a bottleneck</li>
-                    </ul>
-
-                    <p><strong>The AI System Inventory / Registry</strong></p>
-                    <ul>
-                        <li>Centralized, living catalog of every AI system in use, its risk tier, owner, purpose, and status</li>
-                        <li>Foundational control — you cannot govern what you cannot see; increasingly a regulatory requirement (e.g., EU AI Act database for high-risk systems)</li>
-                    </ul>
-
-                    <p><strong>Vendor & Third-Party AI Governance</strong></p>
-                    <ul>
-                        <li>Procurement due diligence: request model cards, bias audit results, and security attestations from vendors</li>
-                        <li>Contractual controls: right-to-audit clauses, liability allocation, notification obligations for model changes</li>
-                        <li>Deployer obligations often apply even when an organization didn't build the underlying model (e.g., fine-tuned or embedded third-party AI)</li>
+                        <li>Know the enforcement mechanisms and penalty structures (fines, market withdrawal, bans) that back these laws</li>
+                        <li>Obligations differ by role in the value chain: <strong>providers</strong> (build/place on market), <strong>deployers</strong> (put into use), <strong>importers</strong>, and <strong>distributors</strong> each have distinct duties</li>
                     </ul>
                 </div>
 
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">6. Model Monitoring & Governance</h3>
-                    <p><strong>Lifecycle Management</strong></p>
+                    <h3 onclick="toggleModule(this)">II.D — Industry Standards and Frameworks</h3>
+                    <p><strong>OECD AI Principles</strong></p>
                     <ul>
-                        <li><strong>Continuous Monitoring:</strong> Tracking model performance and drift over time</li>
-                        <li><strong>Audit Trails:</strong> Recording all decisions and model changes</li>
-                        <li><strong>Model Governance Boards:</strong> Review and approval processes</li>
-                        <li><strong>Incident Response:</strong> Protocols for handling model failures or misuse</li>
-                        <li><strong>Versioning & Updates:</strong> Managing model evolution and rollback strategies</li>
+                        <li>Influential international framework (adopted by 40+ countries) establishing principles for trustworthy AI: inclusive growth, human-centered values and fairness, transparency, robustness/safety/security, and accountability — it underpins much of the G20 AI policy language and many national AI strategies</li>
                     </ul>
-
-                    <p><strong>Types of Drift</strong></p>
+                    <p><strong>NIST AI Risk Management Framework and Playbook</strong></p>
                     <ul>
-                        <li><strong>Data drift (covariate shift):</strong> The statistical distribution of input features changes over time</li>
-                        <li><strong>Concept drift:</strong> The relationship between inputs and the target outcome changes (the thing being predicted itself evolves)</li>
-                        <li><strong>Label drift:</strong> The distribution of the target variable itself shifts</li>
-                        <li><strong>Upstream/pipeline drift:</strong> Changes in a feature's source system silently alter its meaning or scale</li>
+                        <li>Four core functions: <strong>Govern</strong> (build a risk-aware culture and structure), <strong>Map</strong> (identify context and risks of a specific system), <strong>Measure</strong> (analyze and track risk with qualitative/quantitative methods), <strong>Manage</strong> (prioritize and act on risk)</li>
+                        <li>Each function breaks down into more granular <strong>categories and subcategories</strong> — concrete, actionable practices beneath the four high-level functions (e.g., under Map: "context is established and understood"; under Measure: "appropriate methods are identified to measure trustworthiness")</li>
+                        <li>The companion <strong>NIST AI RMF Playbook</strong> offers practical suggestions for implementing each subcategory</li>
                     </ul>
-
-                    <p><strong>Monitoring Metrics</strong></p>
+                    <p><strong>Core ISO/IEC AI Standards</strong></p>
                     <ul>
-                        <li><strong>Performance metrics:</strong> Accuracy, precision, recall, F1, AUC — tracked over time, not just at launch</li>
-                        <li><strong>Fairness metrics:</strong> Ongoing subgroup performance comparisons, not a one-time check</li>
-                        <li><strong>Operational metrics:</strong> Latency, throughput, uptime, error rates</li>
-                        <li><strong>Population Stability Index (PSI) / KL divergence:</strong> Statistical measures commonly used to quantify drift</li>
-                        <li><strong>Business/outcome metrics:</strong> Whether the model is still delivering the intended real-world value</li>
+                        <li><strong>ISO/IEC 22989:</strong> establishes foundational AI concepts and terminology — the common vocabulary used across the other AI standards</li>
+                        <li><strong>ISO/IEC 42001:</strong> the certifiable AI Management System (AIMS) standard — the AI analog to ISO 27001 for information security — specifies requirements for establishing, implementing, and continually improving an organizational AI management system</li>
+                        <li><strong>ISO/IEC 42005:</strong> guidance specifically on AI system impact assessment — how to evaluate the potential consequences of an AI system on individuals, groups, and society</li>
                     </ul>
+                </div>
 
-                    <p><strong>MLOps & Governance Integration</strong></p>
-                    <ul>
-                        <li><strong>CI/CD for models:</strong> Automated testing gates (performance, fairness, security) before promotion to production</li>
-                        <li><strong>Champion/challenger testing:</strong> New model versions run alongside the production model before full rollout</li>
-                        <li><strong>Canary/staged rollout:</strong> Gradually expose a new model to a subset of traffic to limit blast radius</li>
-                        <li><strong>Rollback plans:</strong> Predefined criteria and mechanism to revert to a prior model version</li>
-                    </ul>
+                <div class="domain-header">
+                    <h2>Domain III — Governing AI Development</h2>
+                    <span class="domain-badge">21–25 questions (~27% of exam)</span>
+                </div>
+                <p class="domain-intro">The AI governance professional's responsibilities across designing, building, training, testing and maintaining AI systems.</p>
 
-                    <p><strong>Incident Response for AI</strong></p>
+                <div class="module">
+                    <h3 onclick="toggleModule(this)">III.A — Governing the Design and Build of the AI System</h3>
                     <ul>
-                        <li><strong>Detection:</strong> Automated alerts for drift, fairness violations, or anomalous outputs</li>
-                        <li><strong>Triage & severity classification:</strong> Assess scope of harm (individual vs. systemic)</li>
-                        <li><strong>Containment:</strong> Disable/roll back the model, add human review, or restrict scope</li>
-                        <li><strong>Root cause analysis & remediation:</strong> Fix underlying data, model, or process issue</li>
-                        <li><strong>Disclosure:</strong> Notify affected individuals/regulators where legally required</li>
-                        <li><strong>Post-incident review:</strong> Update governance controls to prevent recurrence</li>
-                    </ul>
-
-                    <p><strong>Model Decommissioning</strong></p>
-                    <ul>
-                        <li>Formal retirement process — an unmonitored legacy model left running is a common source of ungoverned risk ("model sprawl")</li>
-                        <li>Preserve documentation and audit trails post-retirement for legal/regulatory retention requirements</li>
+                        <li><strong>Define the business context and use case</strong> before any modeling work starts — an AI project without a clearly defined problem is ungovernable by default</li>
+                        <li><strong>Perform or review an impact assessment</strong> on the proposed system, covering who could be affected and how</li>
+                        <li><strong>Apply policy and ethics to design/build decisions:</strong> purpose of the AI, requirements gathering, architecture and model selection, human oversight design, data analysis, metric and threshold evaluation (what "good performance" means and where the line is), stakeholder engagement/feedback, and operational controls</li>
+                        <li><strong>Identify and manage risk</strong> using structured tools: a <strong>probability/severity harms matrix</strong> (plot likelihood against severity to prioritize mitigation), a <strong>risk mitigation hierarchy</strong> (eliminate the risk first, then reduce, then control, then merely warn/accept as a last resort), stakeholder mapping, use-case evaluation, benchmarking against alternatives, and pre-deployment pilots/testing</li>
+                        <li><strong>Document the design and build process</strong> — this evidence is what later establishes compliance and supports incident investigations</li>
                     </ul>
                 </div>
 
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">7. AI Governance Tools & Technologies</h3>
-                    <p><strong>Practical Implementation Tools</strong></p>
+                    <h3 onclick="toggleModule(this)">III.B — Governing Data, Training and Testing</h3>
                     <ul>
-                        <li><strong>Explainability Tools:</strong> SHAP, LIME, Integrated Gradients</li>
-                        <li><strong>Fairness Testing:</strong> Bias detection and mitigation frameworks</li>
-                        <li><strong>Model Governance Platforms:</strong> MLflow, Kubeflow, DataRobot</li>
-                        <li><strong>Data Management:</strong> Data catalogs, lineage tracking, quality monitoring</li>
-                        <li><strong>Compliance Tools:</strong> Audit logging, policy enforcement automation</li>
-                    </ul>
-
-                    <p><strong>Explainability Techniques — How They Work</strong></p>
-                    <ul>
-                        <li><strong>SHAP (SHapley Additive exPlanations):</strong> Game-theory-based method that attributes a prediction's outcome to each input feature's contribution, both locally and globally</li>
-                        <li><strong>LIME (Local Interpretable Model-agnostic Explanations):</strong> Approximates a complex model locally with a simple, interpretable one around a specific prediction</li>
-                        <li><strong>Integrated Gradients:</strong> Attributes a neural network's output to input features by integrating gradients along a path from a baseline input</li>
-                        <li><strong>Counterfactual explanations:</strong> Show the minimal change to an input that would flip the model's decision (e.g., "if income were $2,000 higher, the loan would be approved")</li>
-                    </ul>
-
-                    <p><strong>Fairness & Bias Detection Toolkits</strong></p>
-                    <ul>
-                        <li><strong>IBM AI Fairness 360 (AIF360):</strong> Open-source library of fairness metrics and bias mitigation algorithms</li>
-                        <li><strong>Google What-If Tool / Fairness Indicators:</strong> Visual, no-code exploration of model behavior across slices of data</li>
-                        <li><strong>Microsoft Fairlearn:</strong> Python package for assessing and improving fairness in ML models</li>
-                        <li><strong>Aequitas:</strong> Bias audit toolkit focused on policy and public-sector use cases</li>
-                    </ul>
-
-                    <p><strong>MLOps & Model Governance Platforms</strong></p>
-                    <ul>
-                        <li><strong>MLflow:</strong> Open-source experiment tracking, model registry, and packaging</li>
-                        <li><strong>Kubeflow:</strong> Kubernetes-native platform for orchestrating ML pipelines</li>
-                        <li><strong>DataRobot / Databricks / SageMaker Model Monitor:</strong> Enterprise platforms with built-in monitoring, governance, and approval workflows</li>
-                        <li><strong>Model registries:</strong> Central source of truth for model versions, lineage, and approval status</li>
-                    </ul>
-
-                    <p><strong>Data Governance Tools</strong></p>
-                    <ul>
-                        <li><strong>Data catalogs</strong> (e.g., Collibra, Alation): Inventory of data assets with metadata and ownership</li>
-                        <li><strong>Lineage tracking:</strong> Traces data from source through transformations to model input, critical for root-cause analysis and audits</li>
-                        <li><strong>Data quality monitoring:</strong> Automated checks for completeness, consistency, and drift in input data</li>
-                    </ul>
-
-                    <p><strong>Compliance & Documentation Artifacts</strong></p>
-                    <ul>
-                        <li><strong>Model cards:</strong> Standardized documentation of a model's intended use, performance, limitations, and ethical considerations (popularized by Google's Model Card framework)</li>
-                        <li><strong>Datasheets for datasets:</strong> Documentation of dataset provenance, composition, and collection process</li>
-                        <li><strong>Audit logging:</strong> Immutable records of model decisions, inputs, and version used — supports investigations and regulatory audits</li>
-                        <li><strong>Policy-as-code:</strong> Automated enforcement of governance rules (e.g., blocking deployment of a model that fails a bias threshold) directly in the CI/CD pipeline</li>
+                        <li><strong>Data governance requirements:</strong> assess and document the organization's lawful right to collect and use the data (license, consent, or other legal basis), and evaluate data quality, quantity, integrity, and fit-for-purpose for the specific model task</li>
+                        <li><strong>Data lineage and provenance:</strong> establish and document where data came from and how it has been transformed — essential for both compliance and root-cause debugging later</li>
+                        <li><strong>Training and testing plan:</strong> should cover unit testing, integration testing, validation, performance testing, security testing, bias testing, and interpretability testing — treating only "accuracy" as the test criterion is a common and serious gap</li>
+                        <li><strong>Identify and manage issues/risks</strong> that surface during training and testing (e.g., discovering a subgroup performance gap before launch, not after)</li>
+                        <li><strong>Document the training and testing process</strong> to validate results, establish compliance, and support risk management</li>
                     </ul>
                 </div>
 
                 <div class="module">
-                    <h3 onclick="toggleModule(this)">8. Exam Tips & Quick-Reference Glossary</h3>
-                    <p><strong>High-Yield Numbers & Facts</strong></p>
+                    <h3 onclick="toggleModule(this)">III.C — Governing Release, Monitoring and Maintenance</h3>
                     <ul>
-                        <li>NIST AI RMF has <strong>4 core functions</strong>: Govern, Map, Measure, Manage</li>
-                        <li>EU AI Act defines <strong>4 risk tiers</strong>: Unacceptable, High, Limited, Minimal (plus a separate track for General-Purpose AI)</li>
-                        <li>ISO/IEC <strong>42001</strong> = certifiable AI Management System standard (like 27001, but for AI)</li>
-                        <li>ISO/IEC <strong>23894</strong> = AI risk management guidance</li>
-                        <li>GDPR <strong>Article 22</strong> = right not to be subject to solely automated decisions with legal/significant effects</li>
-                        <li>OECD AI Principles were adopted by <strong>40+ countries</strong> and underpin the G20 AI principles</li>
-                        <li>NYC <strong>Local Law 144</strong> = mandatory bias audits for automated employment decision tools</li>
+                        <li><strong>Readiness assessment for release:</strong> confirm the system is ready for production, including creating the <strong>model card</strong> (documentation of intended use, performance, and limitations) and satisfying any applicable conformity requirements</li>
+                        <li><strong>Continuous monitoring:</strong> track the system in production on an ongoing basis, with a regular cadence for maintenance, updates, and retraining — governance doesn't end at launch</li>
+                        <li><strong>Periodic assessment activities:</strong> audits, <strong>red teaming</strong> (adversarial testing by a team simulating attackers/misuse), <strong>threat modeling</strong> (systematically mapping how the system could be attacked or misused), and security testing</li>
+                        <li><strong>Incident, issue and risk management:</strong> a defined process to detect, document, and respond to problems after release</li>
+                        <li><strong>Root-cause collaboration:</strong> work cross-functionally to understand why incidents occur — common causes include brittleness, lack of robustness, poor-quality data, insufficient testing, and model or data drift</li>
+                        <li><strong>Public disclosures:</strong> meet transparency obligations through technical documentation, instructions for use provided to deployers, and post-market monitoring plans</li>
                     </ul>
+                </div>
 
+                <div class="domain-header">
+                    <h2>Domain IV — Governing AI Deployment and Use</h2>
+                    <span class="domain-badge">21–25 questions (~27% of exam)</span>
+                </div>
+                <p class="domain-intro">Responsibilities around selecting, deploying and using an AI system responsibly — whether it's a proprietary model your organization built or a third-party model you're putting into use.</p>
+
+                <div class="module">
+                    <h3 onclick="toggleModule(this)">IV.A — Evaluating Deployment Factors and Risks</h3>
+                    <ul>
+                        <li><strong>Use case context:</strong> business objectives, performance requirements, data availability, ethical considerations, and workforce readiness all shape whether and how to deploy</li>
+                        <li><strong>Model type differences matter for governance:</strong> classic/predictive vs. generative, proprietary vs. open source, small vs. large, and single-language/unimodal vs. multimodal models each carry distinct risk profiles and oversight needs</li>
+                        <li><strong>Deployment options:</strong> cloud vs. on-premise vs. edge deployment change the data-control and security calculus; and a model can be used as-is or adapted via <strong>fine-tuning</strong>, <strong>retrieval-augmented generation (RAG)</strong>, <strong>agentic architectures</strong>, or other techniques — each adaptation technique introduces its own governance considerations (e.g., RAG pulls in external content at inference time that itself needs governance)</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3 onclick="toggleModule(this)">IV.B — Assessing the AI System Before Deployment</h3>
+                    <ul>
+                        <li><strong>Impact assessment:</strong> perform or review one on the specific system being considered for deployment, not just the underlying model in the abstract</li>
+                        <li><strong>Vendor and licensing review:</strong> identify and evaluate key contractual terms and risks — data use rights, liability allocation, service levels, audit rights, and change-notification obligations</li>
+                        <li><strong>Proprietary model deployment:</strong> deploying your own model (rather than a third party's) generally increases both obligations and potential liability, since you have more control and therefore more responsibility for outcomes</li>
+                    </ul>
+                </div>
+
+                <div class="module">
+                    <h3 onclick="toggleModule(this)">IV.C — Governing Deployment and Ongoing Use</h3>
+                    <ul>
+                        <li><strong>Apply policy at deployment:</strong> data governance, risk management, issue management, and user training all need to be in place before go-live, not added afterward</li>
+                        <li><strong>Continuous monitoring and maintenance:</strong> establish a regular schedule for monitoring, updates, and retraining throughout the system's operational life</li>
+                        <li><strong>Periodic assessment:</strong> audits, red teaming, threat modeling, and security testing should continue after deployment, not stop at launch</li>
+                        <li><strong>Documentation:</strong> incidents, issues, risks, and post-market monitoring plans all need to be recorded and kept current</li>
+                        <li><strong>Forecast secondary/unintended uses:</strong> anticipate and reduce the risk of the system being used for something other than its intended purpose, and the downstream harms that could follow</li>
+                        <li><strong>External communication plans:</strong> have a plan for communicating with affected users, regulators, or the public if something goes wrong</li>
+                        <li><strong>Deactivation/localization controls:</strong> maintain the policy and technical ability to shut down or geographically restrict an AI system when required — e.g., due to a new regulatory requirement or a performance/safety issue</li>
+                    </ul>
+                </div>
+
+                <div class="domain-header">
+                    <h2>Bonus — Exam Tips and Quick-Reference Glossary</h2>
+                    <span class="domain-badge">not an official domain</span>
+                </div>
+
+                <div class="module">
+                    <h3 onclick="toggleModule(this)">Exam Tips & Quick-Reference Glossary</h3>
+                    <p><strong>How the Exam Is Weighted</strong></p>
+                    <ul>
+                        <li>Domains III and IV (governing development and governing deployment/use) together make up roughly half the exam — hands-on lifecycle governance is tested more heavily than pure definitions</li>
+                        <li>Per IAPP's own guidance, most questions sit at the Bloom's Taxonomy "remember/understand" and "apply/analyze" levels — expect scenario-style questions ("a team wants to deploy X, what should they do first?"), not just term-matching</li>
+                    </ul>
                     <p><strong>Acronym Cheat Sheet</strong></p>
                     <ul>
-                        <li><strong>XAI</strong> — Explainable AI</li>
-                        <li><strong>SHAP</strong> — SHapley Additive exPlanations</li>
-                        <li><strong>LIME</strong> — Local Interpretable Model-agnostic Explanations</li>
+                        <li><strong>AIGP</strong> — AI Governance Professional (the certification)</li>
                         <li><strong>AIMS</strong> — AI Management System (ISO/IEC 42001)</li>
-                        <li><strong>AIA</strong> — Algorithmic Impact Assessment</li>
-                        <li><strong>DPIA</strong> — Data Protection Impact Assessment</li>
-                        <li><strong>RMF</strong> — Risk Management Framework</li>
+                        <li><strong>RMF</strong> — Risk Management Framework (NIST)</li>
                         <li><strong>GPAI</strong> — General-Purpose AI</li>
-                        <li><strong>HITL / HOTL</strong> — Human-in-the-Loop / Human-on-the-Loop</li>
-                        <li><strong>MLOps</strong> — Machine Learning Operations</li>
-                        <li><strong>PSI</strong> — Population Stability Index (drift metric)</li>
-                        <li><strong>SaMD</strong> — Software as a Medical Device</li>
-                        <li><strong>AIDA</strong> — (Canada) Artificial Intelligence and Data Act</li>
+                        <li><strong>RAG</strong> — Retrieval-Augmented Generation</li>
+                        <li><strong>DPIA</strong> — Data Protection Impact Assessment</li>
+                        <li><strong>XAI</strong> — Explainable AI</li>
                     </ul>
-
                     <p><strong>Commonly Confused Pairs</strong></p>
                     <ul>
-                        <li><strong>Bias vs. Fairness:</strong> Bias is a measurable statistical property (a skew); fairness is the normative judgment about whether that skew is acceptable</li>
-                        <li><strong>Interpretability vs. Explainability:</strong> Interpretability is built-in transparency; explainability is a post-hoc technique applied to a black box</li>
-                        <li><strong>Data drift vs. Concept drift:</strong> Data drift = inputs change; concept drift = the input-output relationship itself changes</li>
-                        <li><strong>Provider vs. Deployer</strong> (EU AI Act): Provider builds/places the system on the market; deployer uses it under their own authority — obligations differ</li>
-                        <li><strong>Governance vs. Compliance:</strong> Compliance is meeting a specific external rule; governance is the broader internal system that produces compliance (and more) consistently</li>
+                        <li><strong>Provider vs. deployer:</strong> provider builds/places on the market; deployer puts into use under its own authority — many orgs are both at once</li>
+                        <li><strong>Risk mitigation hierarchy vs. harms matrix:</strong> the harms matrix helps you <em>prioritize</em> risks (probability × severity); the mitigation hierarchy tells you <em>what order of response</em> to prefer (eliminate → reduce → control → warn/accept)</li>
+                        <li><strong>Red teaming vs. threat modeling:</strong> threat modeling is the systematic, often desk-based mapping of how a system could be attacked; red teaming is the active, hands-on attempt to actually attack/misuse it</li>
+                        <li><strong>Model card vs. impact assessment:</strong> a model card documents what the system is and how it performs; an impact assessment evaluates who could be harmed and how, before or during deployment</li>
                     </ul>
-
                     <p><strong>Study Strategy</strong></p>
                     <ul>
-                        <li>Focus on <em>why</em> a control exists (the harm it prevents), not just its name — exam questions often test application, not recall</li>
-                        <li>Map each regulation to its risk-based structure — most modern AI laws (EU AI Act, Colorado AI Act, Canada's AIDA) share a tiered, risk-based logic</li>
-                        <li>Practice distinguishing overlapping roles (Model Owner vs. Model Validator vs. Data Steward) — these are frequently tested</li>
-                        <li>Review the fairness-metric tradeoffs carefully — questions often present a scenario where two fairness definitions conflict</li>
+                        <li>For each performance indicator, practice explaining <em>why</em> it matters (the harm it prevents), not just its name</li>
+                        <li>Walk through the AI lifecycle end-to-end (design → data/training → release/monitor → deployment/use) and be able to name the governance activity expected at each stage</li>
+                        <li>Regulatory content moves fast — treat specific law names/thresholds as illustrative examples of a risk-tiered pattern, and verify current detail against the official BoK/exam content outline before test day</li>
                     </ul>
                 </div>
             </div>
@@ -841,7 +768,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
                     </div>
-                    <div class="progress-text" id="quizProgressText">0/30 questions answered</div>
+                    <div class="progress-text" id="quizProgressText">0/33 questions answered</div>
                 </div>
 
                 <div id="quizContainer" class="quiz-container"></div>
@@ -883,302 +810,320 @@
         // Quiz data
         const quizData = [
             {
-                question: "What does the EU AI Act classify AI systems by?",
+                domain: "I.A",
+                question: "Which characteristic of AI is described as producing different outputs for the same input, complicating testing and reproducibility?",
+                options: ["Opacity", "Autonomy", "Probabilistic outputs", "Data dependency"],
+                correct: 2
+            },
+            {
+                domain: "I.A",
+                question: "An AI hiring tool consistently ranks resumes from one demographic group lower because the historical hiring data it trained on was itself skewed. This is best categorized as which type of risk?",
+                options: ["Complexity risk", "Ethics and bias risk", "Scalability risk", "Autonomy risk"],
+                correct: 1
+            },
+            {
+                domain: "I.A",
+                question: "Which core principle of responsible AI is focused on preserving meaningful human control over consequential decisions?",
+                options: ["Scalability", "Human-centricity", "Interoperability", "Portability"],
+                correct: 1
+            },
+            {
+                domain: "I.B",
+                question: "A mid-size company with low AI maturity is designing its first governance program. What should most directly shape the scope of its governance approach?",
                 options: [
-                    "Processing speed",
-                    "Risk levels",
-                    "Company size",
-                    "Development cost"
+                    "Copying a large enterprise's exact governance framework",
+                    "Its own size, maturity, industry, products/services, objectives, and risk tolerance",
+                    "The personal preference of one executive",
+                    "The number of competitors currently using AI"
                 ],
                 correct: 1
             },
             {
-                question: "Which principle emphasizes clear communication about AI capabilities and limitations?",
+                domain: "I.B",
+                question: "A company fine-tunes a third-party foundation model and offers the result to customers as its own product. From a governance perspective, what is the company most likely considered?",
                 options: [
-                    "Fairness",
-                    "Sustainability",
-                    "Transparency",
-                    "Privacy"
+                    "Only a deployer",
+                    "Only a user",
+                    "Both a deployer of the base model and, in effect, a provider of the resulting system",
+                    "Neither a provider nor a deployer"
                 ],
                 correct: 2
             },
             {
-                question: "What is model drift in the context of AI governance?",
+                domain: "I.C",
+                question: "\"Ethics by design\" refers to which practice?",
                 options: [
-                    "When a model moves to a new server",
-                    "When model performance degrades over time due to changing data",
-                    "When a model is updated manually",
-                    "When a model loses internet connectivity"
+                    "Reviewing ethics only after a model fails in production",
+                    "Embedding ethical review at the design stage, rather than adding it after the system is built",
+                    "Outsourcing all ethics decisions to outside legal counsel",
+                    "Publishing a general ethics statement on the company website"
                 ],
                 correct: 1
             },
             {
-                question: "Which of the following is NOT a core component of AI governance?",
+                domain: "I.C",
+                question: "Before deploying a new AI vendor tool, which existing organizational policies most likely need to be reevaluated for AI-specific risk?",
                 options: [
-                    "Risk assessment",
-                    "Ethical frameworks",
-                    "Model monitoring",
-                    "Marketing strategies"
-                ],
-                correct: 3
-            },
-            {
-                question: "What is explainability (XAI) primarily concerned with?",
-                options: [
-                    "Making AI systems faster",
-                    "Reducing development costs",
-                    "Making AI decision-making understandable to humans",
-                    "Increasing model accuracy"
-                ],
-                correct: 2
-            },
-            {
-                question: "Which regulation specifically addresses data privacy and algorithmic transparency?",
-                options: [
-                    "CCPA",
-                    "GDPR",
-                    "HIPAA",
-                    "SOX"
+                    "Only the marketing style guide",
+                    "Data privacy, security, data governance, and intellectual property policies",
+                    "Only the employee dress code",
+                    "Only the office facilities policy"
                 ],
                 correct: 1
             },
             {
-                question: "What role is responsible for cross-functional AI oversight?",
+                domain: "II.A",
+                question: "Personal data was collected for customer support purposes. Under data privacy principles, can it automatically be reused to train an unrelated marketing AI model?",
                 options: [
-                    "Chief Technology Officer",
-                    "Chief AI Officer",
-                    "Lead Developer",
-                    "Product Manager"
+                    "Yes, always, without restriction",
+                    "No — purpose limitation and lawful basis must be considered before repurposing the data",
+                    "Yes, but only if the AI model is used internally",
+                    "Yes, as long as the data is deleted after training"
                 ],
                 correct: 1
             },
             {
-                question: "Bias detection in AI systems is primarily related to which principle?",
-                options: [
-                    "Speed",
-                    "Fairness",
-                    "Cost-efficiency",
-                    "Scalability"
-                ],
+                domain: "II.B",
+                question: "An AI-powered lending tool denies loans at a disproportionately higher rate to a protected class, even though the protected characteristic was never used as a direct input feature. Which body of law most directly applies?",
+                options: ["Intellectual property law", "Nondiscrimination law", "Product liability law", "Antitrust law"],
                 correct: 1
             },
             {
-                question: "Which tool is commonly used for model governance and monitoring?",
+                domain: "II.B",
+                question: "A generative AI chatbot fabricates a false customer service policy, and a user relies on it to their financial detriment. Which body of law most directly applies to this scenario?",
                 options: [
-                    "Microsoft Word",
-                    "MLflow",
-                    "Adobe Photoshop",
-                    "Slack"
-                ],
-                correct: 1
-            },
-            {
-                question: "What is the primary purpose of an AI Governance Committee?",
-                options: [
-                    "To approve marketing campaigns",
-                    "To provide cross-functional oversight of AI systems",
-                    "To manage IT infrastructure",
-                    "To handle customer support"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which regulation framework takes a risk-based approach to AI regulation?",
-                options: [
-                    "GDPR",
-                    "EU AI Act",
-                    "CCPA",
-                    "HIPAA"
-                ],
-                correct: 1
-            },
-            {
-                question: "What should be maintained for all AI decisions according to governance best practices?",
-                options: [
-                    "Social media engagement",
-                    "Audit trails",
-                    "Stock prices",
-                    "Customer satisfaction scores"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which principle emphasizes maintaining human control over critical decisions?",
-                options: [
-                    "Automation",
-                    "Efficiency",
-                    "Human Agency",
-                    "Scalability"
-                ],
-                correct: 2
-            },
-            {
-                question: "What is a 'model card' in the context of AI governance?",
-                options: [
-                    "A credit card for model development",
-                    "Documentation of model performance, limitations, and ethical considerations",
-                    "A physical card used to access servers",
-                    "A marketing document for customers"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which of the following is a key responsibility of model owners?",
-                options: [
-                    "Marketing the product",
-                    "Managing model performance and addressing issues",
-                    "Setting company salaries",
-                    "Hiring new employees"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which NIST AI RMF function focuses on cultivating a risk-aware organizational culture?",
-                options: [
-                    "Map",
-                    "Measure",
-                    "Govern",
-                    "Manage"
-                ],
-                correct: 2
-            },
-            {
-                question: "Which ISO/IEC standard is the certifiable AI Management System (AIMS) standard?",
-                options: [
-                    "ISO/IEC 27001",
-                    "ISO/IEC 42001",
-                    "ISO/IEC 9001",
-                    "ISO/IEC 23053"
-                ],
-                correct: 1
-            },
-            {
-                question: "In a data poisoning attack, what does the adversary do?",
-                options: [
-                    "Steals the trained model",
-                    "Corrupts the training data to manipulate model behavior",
-                    "Overloads the server with requests",
-                    "Deletes the model's logs"
-                ],
-                correct: 1
-            },
-            {
-                question: "A membership inference attack allows an adversary to determine what?",
-                options: [
-                    "The model's source code",
-                    "Whether a specific record was part of the training set",
-                    "The model's hosting provider",
-                    "The company's revenue"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which fairness metric requires equal true positive and false positive rates across demographic groups?",
-                options: [
-                    "Demographic parity",
-                    "Predictive parity",
-                    "Equalized odds",
-                    "Individual fairness"
-                ],
-                correct: 2
-            },
-            {
-                question: "What best describes concept drift?",
-                options: [
-                    "The input data's distribution changes over time",
-                    "The relationship between inputs and the target outcome changes over time",
-                    "The model is moved to a new data center",
-                    "The training data is deleted"
-                ],
-                correct: 1
-            },
-            {
-                question: "What distinguishes 'human-on-the-loop' from 'human-in-the-loop' oversight?",
-                options: [
-                    "They are the same thing",
-                    "Human-on-the-loop requires approval of every decision; human-in-the-loop does not",
-                    "Human-on-the-loop monitors and can intervene but doesn't approve every decision, while human-in-the-loop approves each decision",
-                    "Human-on-the-loop means no human oversight at all"
-                ],
-                correct: 2
-            },
-            {
-                question: "What does SHAP (SHapley Additive exPlanations) use to attribute a prediction to input features?",
-                options: [
-                    "Random sampling",
-                    "Game-theory-based Shapley values",
-                    "Manual expert review",
-                    "A separate neural network"
-                ],
-                correct: 1
-            },
-            {
-                question: "What is a counterfactual explanation?",
-                options: [
-                    "A historical record of past model versions",
-                    "The minimal change to an input that would flip the model's decision",
-                    "A legal disclaimer about AI limitations",
-                    "A backup of the training dataset"
-                ],
-                correct: 1
-            },
-            {
-                question: "In the Three Lines of Defense model, which line owns day-to-day risk controls when building and operating models?",
-                options: [
-                    "First line",
-                    "Second line",
-                    "Third line",
-                    "Internal audit"
+                    "Consumer protection law (prohibiting unfair and deceptive practices)",
+                    "Intellectual property law",
+                    "Employment law",
+                    "Tax law"
                 ],
                 correct: 0
             },
             {
-                question: "What is the primary purpose of an Algorithmic Impact Assessment (AIA)?",
+                domain: "II.C",
+                question: "Under a typical risk-tiered AI law, which of the following systems is most likely to fall into the \"high-risk\" category?",
                 options: [
+                    "A spam filter",
+                    "An AI system used to make hiring decisions",
+                    "An AI-controlled non-player character in a video game",
+                    "A recipe recommendation app"
+                ],
+                correct: 1
+            },
+            {
+                domain: "II.C",
+                question: "What distinguishes a \"provider\" from a \"deployer\" under AI-specific law?",
+                options: [
+                    "There is no meaningful legal distinction between them",
+                    "A provider builds and/or places the AI system on the market; a deployer puts it into use under its own authority",
+                    "A deployer always carries more legal liability than a provider",
+                    "A provider is always a government entity"
+                ],
+                correct: 1
+            },
+            {
+                domain: "II.C",
+                question: "What is a distinct regulatory concern specifically raised by general-purpose AI (GPAI) models, such as large language models?",
+                options: [
+                    "They are always banned outright under AI-specific law",
+                    "They may pose systemic risk requiring extra scrutiny, particularly above certain capability or compute thresholds",
+                    "They are exempt from all AI-specific laws",
+                    "They only ever apply to government use cases"
+                ],
+                correct: 1
+            },
+            {
+                domain: "II.D",
+                question: "Which NIST AI Risk Management Framework core function is concerned with identifying the context and risks of a specific AI system?",
+                options: ["Govern", "Map", "Measure", "Manage"],
+                correct: 1
+            },
+            {
+                domain: "II.D",
+                question: "Which ISO/IEC standard specifically provides guidance on AI system impact assessment?",
+                options: ["ISO/IEC 22989", "ISO/IEC 42001", "ISO/IEC 42005", "ISO/IEC 27001"],
+                correct: 2
+            },
+            {
+                domain: "II.D",
+                question: "Which ISO/IEC standard establishes the foundational AI concepts and terminology used across the other AI standards?",
+                options: ["ISO/IEC 22989", "ISO/IEC 42001", "ISO/IEC 42005", "ISO/IEC 9001"],
+                correct: 0
+            },
+            {
+                domain: "III.A",
+                question: "A team wants to start building a new AI system but has not yet clearly defined the business problem it is meant to solve. What is the governance concern?",
+                options: [
+                    "None — the use case can be defined after launch",
+                    "An AI project without a clearly defined use case and business context is effectively ungovernable from the start",
+                    "Business context only matters in regulated industries",
+                    "Only the marketing team needs to define the use case"
+                ],
+                correct: 1
+            },
+            {
+                domain: "III.A",
+                question: "In a risk mitigation hierarchy, what is generally the preferred first response to an identified AI risk?",
+                options: [
+                    "Warn users and accept the risk as-is",
+                    "Eliminate the risk at its source",
+                    "Simply document the risk for later review",
+                    "Ignore risks that fall below an arbitrary severity threshold"
+                ],
+                correct: 1
+            },
+            {
+                domain: "III.A",
+                question: "A probability/severity harms matrix is primarily used to do what?",
+                options: [
+                    "Calculate the AI system's raw accuracy score",
+                    "Prioritize identified risks by weighing likelihood against potential severity",
+                    "Determine the marketing budget for an AI product",
+                    "Select a cloud hosting provider"
+                ],
+                correct: 1
+            },
+            {
+                domain: "III.B",
+                question: "A team is training a new model but has not documented where the training data originated or how it was transformed before use. What governance gap does this represent?",
+                options: [
+                    "A lack of data lineage and provenance documentation",
+                    "A lack of marketing collateral",
+                    "A lack of employee benefits documentation",
+                    "A lack of office signage"
+                ],
+                correct: 0
+            },
+            {
+                domain: "III.B",
+                question: "A model shows strong overall accuracy in testing, but the team only ran performance benchmarks and skipped bias and interpretability testing. What is the primary governance concern?",
+                options: [
+                    "There is no concern, since overall accuracy is high",
+                    "Testing coverage is incomplete — strong overall accuracy can mask subgroup performance gaps and explainability issues",
+                    "The model is definitely biased against every user",
+                    "The team should have skipped performance testing instead"
+                ],
+                correct: 1
+            },
+            {
+                domain: "III.C",
+                question: "What is the primary purpose of a model card?",
+                options: [
+                    "To document the model's intended use, performance, and limitations",
+                    "To track employee attendance",
                     "To calculate cloud computing costs",
-                    "To structure a documented evaluation of an AI system's potential impact before deployment",
-                    "To measure model inference speed",
-                    "To design the user interface"
-                ],
-                correct: 1
-            },
-            {
-                question: "Under the EU AI Act, chatbots and deepfakes typically fall under which risk tier, requiring disclosure that AI is being used?",
-                options: [
-                    "Unacceptable risk",
-                    "High risk",
-                    "Limited risk",
-                    "Minimal risk"
-                ],
-                correct: 2
-            },
-            {
-                question: "What does GDPR Article 22 grant individuals?",
-                options: [
-                    "The right to free AI services",
-                    "The right not to be subject to a decision based solely on automated processing with legal or similarly significant effects",
-                    "The right to sell their personal data",
-                    "The right to unlimited data storage"
-                ],
-                correct: 1
-            },
-            {
-                question: "NYC Local Law 144 specifically requires what for automated employment decision tools?",
-                options: [
-                    "Annual bias audits",
-                    "Free access for job seekers",
-                    "Government ownership of the algorithm",
-                    "Elimination of all automated hiring tools"
+                    "To replace legal contracts with vendors"
                 ],
                 correct: 0
             },
             {
-                question: "What is 'model sprawl' a symptom of?",
+                domain: "III.C",
+                question: "What is the key difference between threat modeling and red teaming?",
                 options: [
-                    "Too much documentation",
-                    "Unmonitored, undecommissioned legacy models left running ungoverned",
-                    "Too many data scientists on a team",
-                    "Excessive model accuracy"
+                    "They are identical practices with different names",
+                    "Threat modeling is a systematic mapping of how a system could be attacked; red teaming is an active, hands-on attempt to actually attack or misuse it",
+                    "Threat modeling only applies to physical hardware",
+                    "Red teaming is only ever performed before a system is built"
+                ],
+                correct: 1
+            },
+            {
+                domain: "III.C",
+                question: "A production model's accuracy has been quietly declining for months because real-world input data has shifted away from what it was originally trained on. This is best described as what?",
+                options: ["A user interface bug", "Model or data drift", "A one-time data entry error", "A software licensing issue"],
+                correct: 1
+            },
+            {
+                domain: "III.C",
+                question: "After a serious AI incident, which practice most directly helps identify why it happened (e.g., brittleness, poor data quality, insufficient testing, drift)?",
+                options: [
+                    "Immediately deleting all system logs",
+                    "Cross-functional root-cause collaboration",
+                    "Ignoring the incident if no one has complained",
+                    "Waiting for the next regularly scheduled audit cycle"
+                ],
+                correct: 1
+            },
+            {
+                domain: "IV.A",
+                question: "A company is deciding between using a foundation model as-is versus adapting it with retrieval-augmented generation (RAG). What is a key governance consideration introduced by RAG?",
+                options: [
+                    "RAG eliminates the need for any further governance",
+                    "RAG pulls in external content at inference time that itself needs to be governed",
+                    "RAG makes the model fully deterministic",
+                    "RAG removes the need for any human oversight"
+                ],
+                correct: 1
+            },
+            {
+                domain: "IV.A",
+                question: "Which deployment option keeps AI processing and data closest to the source device, minimizing data leaving the local environment?",
+                options: ["Cloud deployment", "Edge deployment", "Centralized data center deployment", "Multi-region cloud deployment"],
+                correct: 1
+            },
+            {
+                domain: "IV.B",
+                question: "Before deploying a third-party AI vendor's tool, what should be specifically evaluated in the vendor or licensing agreement?",
+                options: [
+                    "Only the price of the contract",
+                    "Data use rights, liability allocation, audit rights, and change-notification obligations",
+                    "Only the vendor's marketing materials",
+                    "Only the length of the contract term"
+                ],
+                correct: 1
+            },
+            {
+                domain: "IV.B",
+                question: "Compared to deploying a third-party AI system, deploying an organization's own proprietary AI model generally results in what?",
+                options: [
+                    "Lower obligations and reduced liability",
+                    "Increased obligations and higher potential liability",
+                    "No change in obligations at all",
+                    "Automatic exemption from AI-specific regulation"
+                ],
+                correct: 1
+            },
+            {
+                domain: "IV.C",
+                question: "An organization deploys an AI system for one specific purpose, but employees begin using it for a different, unapproved purpose. What governance practice is designed to anticipate this?",
+                options: [
+                    "Forecasting and reducing the risk of secondary or unintended uses",
+                    "Ignoring the new use since it wasn't part of the original scope",
+                    "Immediately shutting down the entire IT department",
+                    "Assuming the vendor is automatically responsible for all misuse"
+                ],
+                correct: 0
+            },
+            {
+                domain: "IV.C",
+                question: "What is the purpose of maintaining a policy and technical controls to deactivate or localize an AI system?",
+                options: [
+                    "To increase system complexity for its own sake",
+                    "To allow the organization to shut down or geographically restrict a system when required, e.g., due to new regulation or a safety issue",
+                    "To make the system harder for legitimate users to access at all times",
+                    "To reduce cloud hosting costs only"
+                ],
+                correct: 1
+            },
+            {
+                domain: "IV.C",
+                question: "Which of the following best describes governing an AI system's ongoing use after deployment?",
+                options: [
+                    "A single one-time review performed only before launch",
+                    "Continuous monitoring, periodic audits/red teaming, and updated documentation throughout the system's operational life",
+                    "No further governance action is needed once a system is deployed",
+                    "Only reviewing the system after it visibly breaks"
+                ],
+                correct: 1
+            },
+            {
+                domain: "IV.C",
+                question: "An AI governance team wants to be prepared to communicate transparently if an AI system causes harm to users. What should they establish in advance?",
+                options: [
+                    "Nothing — this can be improvised if it happens",
+                    "An external communication plan",
+                    "A policy against ever discussing AI incidents publicly",
+                    "A plan to attribute all responsibility to the vendor by default"
                 ],
                 correct: 1
             }
@@ -1218,6 +1163,7 @@
                 });
 
                 quizItem.innerHTML = `
+                    <div class="quiz-domain-tag">Domain ${q.domain}</div>
                     <div class="quiz-question">Question ${index + 1}: ${q.question}</div>
                     <div class="quiz-options">${optionsHtml}</div>
                 `;
@@ -1287,7 +1233,7 @@
             document.querySelector('#quiz .button-group').style.display = 'flex';
             renderQuiz();
             document.getElementById('quizProgress').style.width = '0%';
-            document.getElementById('quizProgressText').textContent = '0/30 questions answered';
+            document.getElementById('quizProgressText').textContent = `0/${quizData.length} questions answered`;
         }
 
         function switchTab(tabName) {
